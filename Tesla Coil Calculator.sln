@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tesla Coil Calculator", "Tesla Coil Calculator\Tesla Coil Calculator.csproj", "{E8EF6745-D465-4F87-BBDB-2F2681C8E673}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E8EF6745-D465-4F87-BBDB-2F2681C8E673}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8EF6745-D465-4F87-BBDB-2F2681C8E673}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8EF6745-D465-4F87-BBDB-2F2681C8E673}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8EF6745-D465-4F87-BBDB-2F2681C8E673}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C71ED2FE-EB68-4315-91B7-1C624D3D6A6F}
+	EndGlobalSection
+EndGlobal
