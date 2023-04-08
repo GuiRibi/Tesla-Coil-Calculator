@@ -1,4 +1,4 @@
-using Microsoft.VisualBasic;
+﻿using Microsoft.VisualBasic;
 using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -8,10 +8,11 @@ namespace Tesla_Coil_Calculator
 {
     public partial class Form1 : Form
     {
-        string[] Inductance = { "H", "mH", "�H", "nH", "pH" };
-        string[] Capacitance = { "F", "mF", "�F", "nF", "pF" };
+        string[] Inductance = { "H", "mH", "µH", "nH", "pH" };
+        string[] Capacitance = { "F", "mF", "µF", "nF", "pF" };
         string[] Frequency = { "Hz", "KHz", "MHz", "GHz" };
-        string[] Angle = { "�", "Rad" };
+        string[] Resistance = { "mΩ", "Ω", "KΩ", "MΩ" };
+        string[] Angle = { "º", "Rad" };
         string[] Units = { "mm", "in" };
 
         public const int WM_NCLBUTTONDOWN = 0xA1;
@@ -150,6 +151,17 @@ namespace Tesla_Coil_Calculator
                 labelRF.Font = Normal;
         }
 
+        private void labelPowerDissipation_MouseEnter(object sender, EventArgs e)
+        {
+            labelPowerDissipation.Font = Bold;
+        }
+
+        private void labelPowerDissipation_MouseLeave(object sender, EventArgs e)
+        {
+            if ((string)pictureBoxImage.Tag != "10")
+                labelPowerDissipation.Font = Normal;
+        }
+
         private void labelHelical_Click(object sender, EventArgs e)
         {
             pictureBoxImage.Tag = "1";
@@ -162,6 +174,7 @@ namespace Tesla_Coil_Calculator
             labelPowerSupply.Font = Normal;
             labelTopLoad.Font = Normal;
             labelRF.Font = Normal;
+            labelPowerDissipation.Font = Normal;
 
             //pictureBox
             pictureBoxImage.Image = Properties.Resources.Helical;
@@ -189,8 +202,8 @@ namespace Tesla_Coil_Calculator
             comboBox2.Visible = true;
             comboBox3.Visible = true;
             comboBox4.Visible = true;
-            comboBox5.Visible= false;
-            comboBox6.Visible= false;
+            comboBox5.Visible = false;
+            comboBox6.Visible = false;
 
             comboBox1.Enabled = false;
             comboBox2.Enabled = true;
@@ -256,6 +269,7 @@ namespace Tesla_Coil_Calculator
             toolTip8_1.Active = false;
             toolTip8_2.Active = false;
             toolTip9.Active = false;
+            toolTip10.Active = false;
         }
 
         private void labelFlat_Click(object sender, EventArgs e)
@@ -270,6 +284,7 @@ namespace Tesla_Coil_Calculator
             labelPowerSupply.Font = Normal;
             labelTopLoad.Font = Normal;
             labelRF.Font = Normal;
+            labelPowerDissipation.Font = Normal;
 
             //pictureBox
             pictureBoxImage.Image = Properties.Resources.Flat;
@@ -364,6 +379,7 @@ namespace Tesla_Coil_Calculator
             toolTip8_1.Active = false;
             toolTip8_2.Active = false;
             toolTip9.Active = false;
+            toolTip10.Active = false;
         }
 
         private void labelConical_Click(object sender, EventArgs e)
@@ -378,6 +394,7 @@ namespace Tesla_Coil_Calculator
             labelPowerSupply.Font = Normal;
             labelTopLoad.Font = Normal;
             labelRF.Font = Normal;
+            labelPowerDissipation.Font = Normal;
 
             //pictureBox
             pictureBoxImage.Image = Properties.Resources.Conical;
@@ -478,6 +495,7 @@ namespace Tesla_Coil_Calculator
             toolTip8_1.Active = false;
             toolTip8_2.Active = false;
             toolTip9.Active = false;
+            toolTip10.Active = false;
         }
 
         private void labelVoltage_Click(object sender, EventArgs e)
@@ -492,6 +510,7 @@ namespace Tesla_Coil_Calculator
             labelPowerSupply.Font = Normal;
             labelTopLoad.Font = Normal;
             labelRF.Font = Normal;
+            labelPowerDissipation.Font = Normal;
 
             //pictureBox
             pictureBoxImage.Image = Properties.Resources.Capacitor;
@@ -563,7 +582,7 @@ namespace Tesla_Coil_Calculator
             label5.Visible = false;
             label6.Visible = false;
 
-            labelTitle.Text = "Capacitor Voltage"; 
+            labelTitle.Text = "Capacitor Voltage";
 
             label1.Text = "U";
             label2.Text = "%";
@@ -580,6 +599,7 @@ namespace Tesla_Coil_Calculator
             toolTip8_1.Active = false;
             toolTip8_2.Active = false;
             toolTip9.Active = false;
+            toolTip10.Active = false;
         }
 
         private void labelCapacitance_Click(object sender, EventArgs e)
@@ -594,6 +614,7 @@ namespace Tesla_Coil_Calculator
             labelPowerSupply.Font = Normal;
             labelTopLoad.Font = Normal;
             labelRF.Font = Normal;
+            labelPowerDissipation.Font = Normal;
 
             //pictureBox
             pictureBoxImage.Image = Properties.Resources.SPCapacitors;
@@ -685,6 +706,7 @@ namespace Tesla_Coil_Calculator
             toolTip8_1.Active = false;
             toolTip8_2.Active = false;
             toolTip9.Active = false;
+            toolTip10.Active = false;
         }
 
         private void labeldVdt_Click(object sender, EventArgs e)
@@ -699,6 +721,7 @@ namespace Tesla_Coil_Calculator
             labelPowerSupply.Font = Normal;
             labelTopLoad.Font = Normal;
             labelRF.Font = Normal;
+            labelPowerDissipation.Font = Normal;
 
             //pictureBox
             pictureBoxImage.Image = Properties.Resources.Capacitor;
@@ -745,7 +768,7 @@ namespace Tesla_Coil_Calculator
 
             comboBox1.Text = "V";
             comboBox2.Items.AddRange(Frequency);
-            comboBox3.Text = "V/�s";
+            comboBox3.Text = "V/µs";
 
             comboBox2.SelectedIndex = 0;
 
@@ -789,6 +812,7 @@ namespace Tesla_Coil_Calculator
             toolTip8_1.Active = false;
             toolTip8_2.Active = false;
             toolTip9.Active = false;
+            toolTip10.Active = false;
         }
 
         private void labelPowerSupply_Click(object sender, EventArgs e)
@@ -803,6 +827,7 @@ namespace Tesla_Coil_Calculator
             labelPowerSupply.Font = Bold;
             labelTopLoad.Font = Normal;
             labelRF.Font = Normal;
+            labelPowerDissipation.Font = Normal;
 
             //pictureBox
             pictureBoxImage.Image = Properties.Resources.transformer;
@@ -891,6 +916,7 @@ namespace Tesla_Coil_Calculator
             toolTip8_1.Active = false;
             toolTip8_2.Active = false;
             toolTip9.Active = false;
+            toolTip10.Active = false;
         }
 
         private void labelTopLoad_Click(object sender, EventArgs e)
@@ -905,6 +931,7 @@ namespace Tesla_Coil_Calculator
             labelPowerSupply.Font = Normal;
             labelTopLoad.Font = Bold;
             labelRF.Font = Normal;
+            labelPowerDissipation.Font = Normal;
 
             //pictureBox
             pictureBoxImage.Image = Properties.Resources.sphere;
@@ -994,6 +1021,7 @@ namespace Tesla_Coil_Calculator
             toolTip8_1.Active = true;
             toolTip8_2.Active = false;
             toolTip9.Active = false;
+            toolTip10.Active = false;
         }
 
         private void labelRF_Click(object sender, EventArgs e)
@@ -1008,6 +1036,7 @@ namespace Tesla_Coil_Calculator
             labelPowerSupply.Font = Normal;
             labelTopLoad.Font = Normal;
             labelRF.Font = Bold;
+            labelPowerDissipation.Font = Normal;
 
             //pictureBox
             pictureBoxImage.Image = Properties.Resources.LCcircuit;
@@ -1100,6 +1129,7 @@ namespace Tesla_Coil_Calculator
             toolTip8_1.Active = false;
             toolTip8_2.Active = false;
             toolTip9.Active = true;
+            toolTip10.Active = false;
         }
 
         private void pictureBoxSphere_Click(object sender, EventArgs e)
@@ -1194,6 +1224,7 @@ namespace Tesla_Coil_Calculator
                 toolTip8_1.Active = true;
                 toolTip8_2.Active = false;
                 toolTip9.Active = false;
+                toolTip10.Active = false;
             }
         }
 
@@ -1292,8 +1323,116 @@ namespace Tesla_Coil_Calculator
                 toolTip8_1.Active = false;
                 toolTip8_2.Active = true;
                 toolTip9.Active = false;
+                toolTip10.Active = false;
             }
         }
+
+        private void labelPowerDissipation_Click(object sender, EventArgs e)
+        {
+            pictureBoxImage.Tag = "10";
+            labelHelical.Font = Normal;
+            labelFlat.Font = Normal;
+            labelConical.Font = Normal;
+            labelVoltage.Font = Normal;
+            labelCapacitance.Font = Normal;
+            labeldVdt.Font = Normal;
+            labelPowerSupply.Font = Normal;
+            labelTopLoad.Font = Normal;
+            labelRF.Font = Normal;
+            labelPowerDissipation.Font = Bold;
+
+            //pictureBox
+            pictureBoxImage.Image = Properties.Resources.Resistor;
+
+            pictureBoxSphere.Visible = false;
+            pictureBoxTorus.Visible = false;
+
+            //Textbox
+            textBox1.Visible = true;
+            textBox2.Visible = true;
+            textBox3.Visible = true;
+            textBox4.Visible = false;
+            textBox5.Visible = false;
+            textBox6.Visible = false;
+
+            textBox1.Text = null;
+            textBox2.Text = null;
+            textBox3.Text = null;
+            textBox4.Text = null;
+            textBox5.Text = null;
+            textBox6.Text = null;
+
+            //Combobox
+            comboBox1.Visible = true;
+            comboBox2.Visible = true;
+            comboBox3.Visible = true;
+            comboBox4.Visible = false;
+            comboBox5.Visible = false;
+            comboBox6.Visible = false;
+
+            comboBox1.Enabled = true;
+            comboBox2.Enabled = false;
+            comboBox3.Enabled = false;
+            comboBox4.Enabled = false;
+            comboBox5.Enabled = false;
+            comboBox6.Enabled = false;
+
+            comboBox1.Items.Clear();
+            comboBox2.Items.Clear();
+            comboBox3.Items.Clear();
+            comboBox4.Items.Clear();
+            comboBox5.Items.Clear();
+            comboBox6.Items.Clear();
+
+            comboBox1.Items.AddRange(Resistance);
+            comboBox2.Text = "A";
+            comboBox3.Text = "W";
+
+            comboBox1.SelectedIndex = 1;
+
+            //Radiobutton
+            radioButton1.Visible = true;
+            radioButton2.Visible = true;
+            radioButton3.Visible = true;
+            radioButton4.Visible = false;
+            radioButton5.Visible = false;
+            radioButton6.Visible = false;
+
+            radioButton1.Checked = false;
+            radioButton2.Checked = false;
+            radioButton3.Checked = false;
+            radioButton4.Checked = false;
+            radioButton5.Checked = false;
+            radioButton6.Checked = false;
+
+            //Label
+            label1.Visible = true;
+            label2.Visible = true;
+            label3.Visible = true;
+            label4.Visible = false;
+            label5.Visible = false;
+            label6.Visible = false;
+
+            labelTitle.Text = "Power Dissipation";
+
+            label1.Text = "R";
+            label2.Text = "I";
+            label3.Text = "P";
+
+            //Tooltip
+            toolTip1.Active = false;
+            toolTip2.Active = false;
+            toolTip3.Active = false;
+            toolTip4.Active = false;
+            toolTip5.Active = false;
+            toolTip6.Active = false;
+            toolTip7.Active = false;
+            toolTip8_1.Active = false;
+            toolTip8_2.Active = false;
+            toolTip9.Active = false;
+            toolTip10.Active = true;
+        }
+
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsDigit(e.KeyChar) && e.KeyChar != '.' && e.KeyChar != (char)Keys.Back && e.KeyChar != '\u0003' || e.KeyChar == '.' && textBox1.Text.Contains("."))
@@ -1809,7 +1948,7 @@ namespace Tesla_Coil_Calculator
                         }
                         if (radioButton4.Checked)
                         {
-                            d1 = Convert.ToDouble(textBox1.Text); 
+                            d1 = Convert.ToDouble(textBox1.Text);
                             if (comboBox1.SelectedIndex == 0)
                                 d1 = d1 * Math.Pow(10, 6);
                             if (comboBox1.SelectedIndex == 1)
@@ -2090,7 +2229,7 @@ namespace Tesla_Coil_Calculator
                             if (comboBox1.SelectedIndex == 4)
                                 d1 = d1 * Math.Pow(10, -12);
 
-                            d2 = Convert.ToDouble(textBox2.Text); 
+                            d2 = Convert.ToDouble(textBox2.Text);
                             if (comboBox2.SelectedIndex == 1)
                                 d2 = d2 * Math.Pow(10, -3);
                             if (comboBox2.SelectedIndex == 2)
@@ -2116,9 +2255,67 @@ namespace Tesla_Coil_Calculator
                                 textBox3.Text = d3.ToString("0.0#####E0");
                         }
                         break;
+                    case "10"://Resonance Frequency
+                        if (radioButton1.Checked)
+                        {
+                            d2 = Convert.ToDouble(textBox2.Text);
+                            d3 = Convert.ToDouble(textBox3.Text);
+
+                            d1 = d3 / (d2 * d2);
+                            if (comboBox1.SelectedIndex == 0)
+                                d1 = d1 * Math.Pow(10, 3);
+                            if (comboBox1.SelectedIndex == 2)
+                                d1 = d1 * Math.Pow(10, -3);
+                            if (comboBox1.SelectedIndex == 3)
+                                d1 = d1 * Math.Pow(10, -6);
+
+                            if (d1 >= 1)
+                                textBox1.Text = d1.ToString("0.0#####E+0");
+                            else
+                                textBox1.Text = d1.ToString("0.0#####E0");
+                        }
+                        if (radioButton2.Checked)
+                        {
+                            d1 = Convert.ToDouble(textBox1.Text);
+                            if (comboBox1.SelectedIndex == 0)
+                                d1 = d1 * Math.Pow(10, -3);
+                            if (comboBox1.SelectedIndex == 2)
+                                d1 = d1 * Math.Pow(10, 3);
+                            if (comboBox1.SelectedIndex == 3)
+                                d1 = d1 * Math.Pow(10, 6);
+
+                            d3 = Convert.ToDouble(textBox3.Text);
+
+                            d2 = Math.Sqrt(d3 / d1);
+
+                            if (d2 >= 1)
+                                textBox2.Text = d2.ToString("0.0#####E+0");
+                            else
+                                textBox2.Text = d2.ToString("0.0#####E0");
+                        }
+                        if (radioButton3.Checked)
+                        {
+                            d1 = Convert.ToDouble(textBox1.Text);
+                            if (comboBox1.SelectedIndex == 0)
+                                d1 = d1 * Math.Pow(10, -3);
+                            if (comboBox1.SelectedIndex == 2)
+                                d1 = d1 * Math.Pow(10, 3);
+                            if (comboBox1.SelectedIndex == 3)
+                                d1 = d1 * Math.Pow(10, 6);
+
+                            d2 = Convert.ToDouble(textBox2.Text);
+
+                            d3 = d1 * d2 * d2;
+
+                            if (d3 >= 1)
+                                textBox3.Text = d3.ToString("0.0#####E+0");
+                            else
+                                textBox3.Text = d3.ToString("0.0#####E0");
+                        }
+                        break;
                 }
             }
-            catch 
+            catch
             {
 
             }
@@ -2162,6 +2359,12 @@ namespace Tesla_Coil_Calculator
         private void comboBox6_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = true;
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            Start start = new Start();
+            start.Show();
         }
     }
 }
