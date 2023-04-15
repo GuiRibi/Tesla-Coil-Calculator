@@ -12,5 +12,5 @@ Select an option from the tab on the left.>> Click on the Radiobutton with the v
 Download and extract [this Zip file](https://github.com/GuiRibi/Tesla-Coil-Calculator/blob/1.1.0/Tesla%20Coil%20Calculator.zip) and run ***Tesla Coil Calculator.exe***
 
 # Change Log
-* Added **Power dissipation** calclulator;
-* Added a **Instructions** button to the top left corner of the app.
+* Added **Constant current capacitor charging** calclulator (DEV);
+* Added **Graphical Calculator** support (DEV).
