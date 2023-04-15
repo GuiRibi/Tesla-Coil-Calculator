@@ -102,6 +102,7 @@
             toolTip8_2 = new ToolTip(components);
             toolTip9 = new ToolTip(components);
             toolTip10 = new ToolTip(components);
+            button1 = new Button();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxIcon).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxClose).BeginInit();
@@ -489,6 +490,7 @@
             tableLayoutPanel7.Controls.Add(labelTitle, 1, 1);
             tableLayoutPanel7.Controls.Add(tableLayoutPanel8, 1, 2);
             tableLayoutPanel7.Controls.Add(pictureBox1, 0, 0);
+            tableLayoutPanel7.Controls.Add(button1, 1, 0);
             tableLayoutPanel7.Dock = DockStyle.Fill;
             tableLayoutPanel7.Location = new Point(155, 30);
             tableLayoutPanel7.Name = "tableLayoutPanel7";
@@ -588,6 +590,15 @@
             tableLayoutPanel10.Location = new Point(3, 3);
             tableLayoutPanel10.Name = "tableLayoutPanel10";
             tableLayoutPanel10.RowCount = 1;
+            tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel10.Size = new Size(363, 363);
             tableLayoutPanel10.TabIndex = 8;
@@ -964,6 +975,16 @@
             // 
             toolTip10.Active = false;
             // 
+            // button1
+            // 
+            button1.Location = new Point(26, 3);
+            button1.Name = "button1";
+            button1.Size = new Size(75, 15);
+            button1.TabIndex = 3;
+            button1.Text = "button1";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1084,5 +1105,6 @@
         private Label labelPowerDissipation;
         private PictureBox pictureBox1;
         private ToolTip toolTip10;
+        private Button button1;
     }
 }

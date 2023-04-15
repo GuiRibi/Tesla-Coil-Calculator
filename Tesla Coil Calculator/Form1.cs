@@ -33,6 +33,8 @@ namespace Tesla_Coil_Calculator
         double d5;
         double d6;
 
+        PointF[] Graphcalc = new PointF[30000];
+
         public Form1()
         {
             InitializeComponent();
@@ -2365,6 +2367,27 @@ namespace Tesla_Coil_Calculator
         {
             Start start = new Start();
             start.Show();
+        }
+
+        //Constant current capacitor charging (DEVELOPER RELEASE)
+        int i = 0;
+        private void button1_Click(object sender, EventArgs e)
+        {
+            GraphCalc calc = new GraphCalc(0, 0, 0);
+            calc.TimeWindow(0.0000001, 0.3, 0, 1000);
+            for(double t = 0; t <= calc.T; t = t + calc.T / pictureBoxImage.Width)
+            {
+                calc.Capacitor_Charging(0.0000001, 0.3, 0, t);
+                PointF point = new PointF(i, (float)calc.V * pictureBoxImage.Height / 1000);
+                Graphcalc[i] = new PointF(point.X, point.Y);
+                i++;
+            }
+            Bitmap btm = new Bitmap(pictureBoxImage.Width, pictureBoxImage.Height);
+            Graphics g = Graphics.FromImage(btm);
+
+            g.DrawLines(Pens.AliceBlue, Graphcalc);
+
+            pictureBoxImage.Image = btm;
         }
     }
 }
