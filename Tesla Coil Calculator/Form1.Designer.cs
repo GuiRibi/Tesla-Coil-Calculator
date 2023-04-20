@@ -90,6 +90,7 @@
             radioButton4 = new RadioButton();
             radioButton1 = new RadioButton();
             pictureBox1 = new PictureBox();
+            button1 = new Button();
             timerCalc = new System.Windows.Forms.Timer(components);
             toolTip1 = new ToolTip(components);
             toolTip2 = new ToolTip(components);
@@ -102,7 +103,6 @@
             toolTip8_2 = new ToolTip(components);
             toolTip9 = new ToolTip(components);
             toolTip10 = new ToolTip(components);
-            button1 = new Button();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxIcon).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxClose).BeginInit();
@@ -481,6 +481,7 @@
             pictureBoxImage.TabIndex = 6;
             pictureBoxImage.TabStop = false;
             pictureBoxImage.Tag = "0";
+            pictureBoxImage.MouseMove += pictureBoxImage_MouseMove;
             // 
             // tableLayoutPanel7
             // 
@@ -965,16 +966,6 @@
             pictureBox1.TabStop = false;
             pictureBox1.Click += pictureBox1_Click;
             // 
-            // timerCalc
-            // 
-            timerCalc.Enabled = true;
-            timerCalc.Interval = 20;
-            timerCalc.Tick += timerCalc_Tick;
-            // 
-            // toolTip10
-            // 
-            toolTip10.Active = false;
-            // 
             // button1
             // 
             button1.Location = new Point(26, 3);
@@ -984,6 +975,16 @@
             button1.Text = "button1";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
+            // 
+            // timerCalc
+            // 
+            timerCalc.Enabled = true;
+            timerCalc.Interval = 20;
+            timerCalc.Tick += timerCalc_Tick;
+            // 
+            // toolTip10
+            // 
+            toolTip10.Active = false;
             // 
             // Form1
             // 

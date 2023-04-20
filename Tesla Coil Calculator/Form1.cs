@@ -1,5 +1,7 @@
 ﻿using Microsoft.VisualBasic;
+using System.Drawing.Drawing2D;
 using System.Linq.Expressions;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
@@ -33,7 +35,10 @@ namespace Tesla_Coil_Calculator
         double d5;
         double d6;
 
-        PointF[] Graphcalc = new PointF[30000];
+        int width;
+
+        Vector4[] Graphcalc;
+        PointF[] pointFs;
 
         public Form1()
         {
@@ -51,7 +56,9 @@ namespace Tesla_Coil_Calculator
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            width = pictureBoxImage.Width;
+            Graphcalc = new Vector4[width + 1];
+            pointFs = new PointF[width + 1];
         }
 
         private void labelHelical_MouseEnter(object sender, EventArgs e)
@@ -2370,24 +2377,60 @@ namespace Tesla_Coil_Calculator
         }
 
         //Constant current capacitor charging (DEVELOPER RELEASE)
-        int i = 0;
+
         private void button1_Click(object sender, EventArgs e)
         {
+            Array.Clear(Graphcalc, 0, Graphcalc.Length);
+            Array.Clear(pointFs, 0, Graphcalc.Length);
+            int i = 0;
+
+            var penBlack = new Pen(Color.Black, 2);
+
+            penBlack.CustomEndCap = new AdjustableArrowCap(5, 5);
+
             GraphCalc calc = new GraphCalc(0, 0, 0);
             calc.TimeWindow(0.0000001, 0.3, 0, 1000);
-            for(double t = 0; t <= calc.T; t = t + calc.T / pictureBoxImage.Width)
+            for (double t = 0; t < calc.T; t = t + calc.T / pictureBoxImage.Width)
             {
                 calc.Capacitor_Charging(0.0000001, 0.3, 0, t);
-                PointF point = new PointF(i, (float)calc.V * pictureBoxImage.Height / 1000);
-                Graphcalc[i] = new PointF(point.X, point.Y);
+                if ((float)calc.V * pictureBoxImage.Height / 1000 > 1000)
+                    break;
+                Vector4 vector = new Vector4(i, pictureBoxImage.Height - (float)calc.V * pictureBoxImage.Height / 1000, (float)calc.DeltaT, (float)calc.V);
+                Graphcalc[i] = vector;
+
+                pointFs[i] = Array.ConvertAll<Vector4, PointF>(new Vector4[] { vector }, v => new PointF(v.X, v.Y))[0];
                 i++;
             }
+
             Bitmap btm = new Bitmap(pictureBoxImage.Width, pictureBoxImage.Height);
             Graphics g = Graphics.FromImage(btm);
 
-            g.DrawLines(Pens.AliceBlue, Graphcalc);
+            g.FillRectangle(Brushes.White, 0, 0, pictureBoxImage.Width, pictureBoxImage.Height);
 
+            g.DrawLines(new Pen(Brushes.Red, 2), pointFs);
+            g.DrawLine(penBlack, new Point(0, pictureBoxImage.Height - 4), new Point(pictureBoxImage.Width - 4, pictureBoxImage.Height - 4));
+            g.DrawLine(penBlack, new Point(4, pictureBoxImage.Height), new Point(4, 0));
+            g.DrawString("t = " + calc.T.ToString("0.0##E+0"), new Font("Segoe UI", 7), new SolidBrush(Color.Black), pictureBoxImage.Width - 60, pictureBoxImage.Height - 20);
             pictureBoxImage.Image = btm;
+
+            image = pictureBoxImage.Image;
+        }
+        Image image;
+        private void pictureBoxImage_MouseMove(object sender, MouseEventArgs e)
+        {
+            
+            foreach (Vector4 graph in Graphcalc)
+            {
+                if(graph.X == e.X)
+                {
+                    Bitmap btm = new Bitmap(pictureBoxImage.Width, pictureBoxImage.Height);
+                    Graphics g = Graphics.FromImage(btm);
+                    g.DrawImage(image, 0, 0);
+                    g.DrawString(graph.Z.ToString("0.0##E+0"), new Font("Segoe UI", 7), new SolidBrush(Color.Black), 100, 100);
+                    textBox1.Text = graph.Z.ToString("0.0##E+0") + " + " + graph.W.ToString("0.0##E+0");
+                    pictureBoxImage.Image = btm;
+                }
+            }
         }
     }
 }
