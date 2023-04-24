@@ -1,6 +1,10 @@
-﻿namespace Tesla_Coil_Calculator
+﻿using static System.Net.Mime.MediaTypeNames;
+using System.Windows.Forms;
+using System.Xml.Linq;
+
+namespace Tesla_Coil_Calculator
 {
-    partial class Calculator
+    partial class GraphicsCalculator
     {
         /// <summary>
         ///  Required designer variable.
@@ -29,28 +33,19 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Calculator));
             tableLayoutPanel1 = new TableLayoutPanel();
             pictureBoxIcon = new PictureBox();
             pictureBoxClose = new PictureBox();
             pictureBoxMinimize = new PictureBox();
             tableLayoutPanel2 = new TableLayoutPanel();
             tableLayoutPanel5 = new TableLayoutPanel();
-            labelConical = new Label();
-            labelFlat = new Label();
-            labelHelical = new Label();
-            tableLayoutPanel4 = new TableLayoutPanel();
-            labeldVdt = new Label();
-            labelCapacitance = new Label();
-            labelVoltage = new Label();
+            labelResistiveDischarging = new Label();
+            labelCCDischarging = new Label();
+            labelCCCharging = new Label();
             labelCoils = new Label();
-            labelCapacitors = new Label();
             labelOthers = new Label();
             tableLayoutPanel6 = new TableLayoutPanel();
-            labelPowerSupply = new Label();
-            labelTopLoad = new Label();
-            labelRF = new Label();
-            labelPowerDissipation = new Label();
+            labelSkinEffect = new Label();
             tableLayoutPanel3 = new TableLayoutPanel();
             label10 = new Label();
             label11 = new Label();
@@ -60,8 +55,7 @@
             tableLayoutPanel8 = new TableLayoutPanel();
             tableLayoutPanel9 = new TableLayoutPanel();
             panel2 = new Panel();
-            pictureBoxTorus = new PictureBox();
-            pictureBoxSphere = new PictureBox();
+            button1 = new Button();
             tableLayoutPanel10 = new TableLayoutPanel();
             tableLayoutPanel11 = new TableLayoutPanel();
             label6 = new Label();
@@ -90,7 +84,6 @@
             radioButton4 = new RadioButton();
             radioButton1 = new RadioButton();
             pictureBox1 = new PictureBox();
-            button1 = new Button();
             timerCalc = new System.Windows.Forms.Timer(components);
             toolTip1 = new ToolTip(components);
             toolTip2 = new ToolTip(components);
@@ -109,7 +102,6 @@
             ((System.ComponentModel.ISupportInitialize)pictureBoxMinimize).BeginInit();
             tableLayoutPanel2.SuspendLayout();
             tableLayoutPanel5.SuspendLayout();
-            tableLayoutPanel4.SuspendLayout();
             tableLayoutPanel6.SuspendLayout();
             tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxImage).BeginInit();
@@ -117,8 +109,6 @@
             tableLayoutPanel8.SuspendLayout();
             tableLayoutPanel9.SuspendLayout();
             panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBoxTorus).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBoxSphere).BeginInit();
             tableLayoutPanel10.SuspendLayout();
             tableLayoutPanel11.SuspendLayout();
             panel1.SuspendLayout();
@@ -167,7 +157,6 @@
             pictureBoxClose.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBoxClose.TabIndex = 0;
             pictureBoxClose.TabStop = false;
-            pictureBoxClose.Click += pictureBoxClose_Click;
             // 
             // pictureBoxMinimize
             // 
@@ -180,7 +169,6 @@
             pictureBoxMinimize.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBoxMinimize.TabIndex = 2;
             pictureBoxMinimize.TabStop = false;
-            pictureBoxMinimize.Click += pictureBoxMinimize_Click;
             // 
             // tableLayoutPanel2
             // 
@@ -188,23 +176,21 @@
             tableLayoutPanel2.ColumnCount = 1;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel2.Controls.Add(tableLayoutPanel5, 0, 2);
-            tableLayoutPanel2.Controls.Add(tableLayoutPanel4, 0, 4);
             tableLayoutPanel2.Controls.Add(labelCoils, 0, 1);
-            tableLayoutPanel2.Controls.Add(labelCapacitors, 0, 3);
-            tableLayoutPanel2.Controls.Add(labelOthers, 0, 5);
-            tableLayoutPanel2.Controls.Add(tableLayoutPanel6, 0, 6);
+            tableLayoutPanel2.Controls.Add(labelOthers, 0, 3);
+            tableLayoutPanel2.Controls.Add(tableLayoutPanel6, 0, 4);
             tableLayoutPanel2.Dock = DockStyle.Left;
             tableLayoutPanel2.Location = new Point(0, 30);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
-            tableLayoutPanel2.RowCount = 8;
+            tableLayoutPanel2.RowCount = 6;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 13F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 27F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 78F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 144F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 97F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 28F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 243F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel2.Size = new Size(155, 420);
             tableLayoutPanel2.TabIndex = 1;
             // 
@@ -213,9 +199,9 @@
             tableLayoutPanel5.ColumnCount = 2;
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 15F));
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel5.Controls.Add(labelConical, 1, 2);
-            tableLayoutPanel5.Controls.Add(labelFlat, 1, 1);
-            tableLayoutPanel5.Controls.Add(labelHelical, 1, 0);
+            tableLayoutPanel5.Controls.Add(labelResistiveDischarging, 1, 2);
+            tableLayoutPanel5.Controls.Add(labelCCDischarging, 1, 1);
+            tableLayoutPanel5.Controls.Add(labelCCCharging, 1, 0);
             tableLayoutPanel5.Dock = DockStyle.Fill;
             tableLayoutPanel5.Location = new Point(3, 38);
             tableLayoutPanel5.Name = "tableLayoutPanel5";
@@ -223,110 +209,50 @@
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel5.Size = new Size(149, 74);
+            tableLayoutPanel5.Size = new Size(149, 91);
             tableLayoutPanel5.TabIndex = 9;
             // 
-            // labelConical
+            // labelResistiveDischarging
             // 
-            labelConical.AutoSize = true;
-            labelConical.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            labelConical.ForeColor = Color.White;
-            labelConical.Location = new Point(18, 44);
-            labelConical.Name = "labelConical";
-            labelConical.Size = new Size(72, 21);
-            labelConical.TabIndex = 7;
-            labelConical.Text = ">Conical";
-            labelConical.Click += labelConical_Click;
-            labelConical.MouseEnter += labelConical_MouseEnter;
-            labelConical.MouseLeave += labelConical_MouseLeave;
+            labelResistiveDischarging.AutoSize = true;
+            labelResistiveDischarging.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            labelResistiveDischarging.ForeColor = Color.White;
+            labelResistiveDischarging.Location = new Point(18, 44);
+            labelResistiveDischarging.Name = "labelResistiveDischarging";
+            labelResistiveDischarging.Size = new Size(105, 42);
+            labelResistiveDischarging.TabIndex = 7;
+            labelResistiveDischarging.Text = ">Resistive\r\n   Discharging";
+            labelResistiveDischarging.Click += labelResistiveDischarging_Click;
+            labelResistiveDischarging.MouseEnter += labelResistiveDischarging_MouseEnter;
+            labelResistiveDischarging.MouseLeave += labelResistiveDischarging_MouseLeave;
             // 
-            // labelFlat
+            // labelCCDischarging
             // 
-            labelFlat.AutoSize = true;
-            labelFlat.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            labelFlat.ForeColor = Color.White;
-            labelFlat.Location = new Point(18, 22);
-            labelFlat.Name = "labelFlat";
-            labelFlat.Size = new Size(46, 21);
-            labelFlat.TabIndex = 8;
-            labelFlat.Text = ">Flat";
-            labelFlat.Click += labelFlat_Click;
-            labelFlat.MouseEnter += labelFlat_MouseEnter;
-            labelFlat.MouseLeave += labelFlat_MouseLeave;
+            labelCCDischarging.AutoSize = true;
+            labelCCDischarging.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            labelCCDischarging.ForeColor = Color.White;
+            labelCCDischarging.Location = new Point(18, 22);
+            labelCCDischarging.Name = "labelCCDischarging";
+            labelCCDischarging.Size = new Size(128, 21);
+            labelCCDischarging.TabIndex = 8;
+            labelCCDischarging.Text = ">CC Discharging";
+            labelCCDischarging.Click += labelCCDischarging_Click;
+            labelCCDischarging.MouseEnter += labelCCDischarging_MouseEnter;
+            labelCCDischarging.MouseLeave += labelCCDischarging_MouseLeave;
             // 
-            // labelHelical
+            // labelCCCharging
             // 
-            labelHelical.AutoSize = true;
-            labelHelical.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            labelHelical.ForeColor = Color.White;
-            labelHelical.Location = new Point(18, 0);
-            labelHelical.Name = "labelHelical";
-            labelHelical.Size = new Size(67, 21);
-            labelHelical.TabIndex = 2;
-            labelHelical.Text = ">Helical";
-            labelHelical.Click += labelHelical_Click;
-            labelHelical.MouseEnter += labelHelical_MouseEnter;
-            labelHelical.MouseLeave += labelHelical_MouseLeave;
-            // 
-            // tableLayoutPanel4
-            // 
-            tableLayoutPanel4.ColumnCount = 2;
-            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 15F));
-            tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel4.Controls.Add(labeldVdt, 1, 2);
-            tableLayoutPanel4.Controls.Add(labelCapacitance, 1, 1);
-            tableLayoutPanel4.Controls.Add(labelVoltage, 1, 0);
-            tableLayoutPanel4.Dock = DockStyle.Fill;
-            tableLayoutPanel4.Location = new Point(3, 145);
-            tableLayoutPanel4.Name = "tableLayoutPanel4";
-            tableLayoutPanel4.RowCount = 3;
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel4.Size = new Size(149, 72);
-            tableLayoutPanel4.TabIndex = 7;
-            // 
-            // labeldVdt
-            // 
-            labeldVdt.AutoSize = true;
-            labeldVdt.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            labeldVdt.ForeColor = Color.White;
-            labeldVdt.Location = new Point(18, 44);
-            labeldVdt.Name = "labeldVdt";
-            labeldVdt.Size = new Size(60, 21);
-            labeldVdt.TabIndex = 4;
-            labeldVdt.Text = ">dV/dt";
-            labeldVdt.Click += labeldVdt_Click;
-            labeldVdt.MouseEnter += labeldVdt_MouseEnter;
-            labeldVdt.MouseLeave += labeldVdt_MouseLeave;
-            // 
-            // labelCapacitance
-            // 
-            labelCapacitance.AutoSize = true;
-            labelCapacitance.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            labelCapacitance.ForeColor = Color.White;
-            labelCapacitance.Location = new Point(18, 22);
-            labelCapacitance.Name = "labelCapacitance";
-            labelCapacitance.Size = new Size(104, 21);
-            labelCapacitance.TabIndex = 5;
-            labelCapacitance.Text = ">Capacitance";
-            labelCapacitance.Click += labelCapacitance_Click;
-            labelCapacitance.MouseEnter += labelCapacitance_MouseEnter;
-            labelCapacitance.MouseLeave += labelCapacitance_MouseLeave;
-            // 
-            // labelVoltage
-            // 
-            labelVoltage.AutoSize = true;
-            labelVoltage.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            labelVoltage.ForeColor = Color.White;
-            labelVoltage.Location = new Point(18, 0);
-            labelVoltage.Name = "labelVoltage";
-            labelVoltage.Size = new Size(73, 21);
-            labelVoltage.TabIndex = 6;
-            labelVoltage.Text = ">Voltage";
-            labelVoltage.Click += labelVoltage_Click;
-            labelVoltage.MouseEnter += labelVoltage_MouseEnter;
-            labelVoltage.MouseLeave += labelVoltage_MouseLeave;
+            labelCCCharging.AutoSize = true;
+            labelCCCharging.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            labelCCCharging.ForeColor = Color.White;
+            labelCCCharging.Location = new Point(18, 0);
+            labelCCCharging.Name = "labelCCCharging";
+            labelCCCharging.Size = new Size(109, 21);
+            labelCCCharging.TabIndex = 2;
+            labelCCCharging.Text = ">CC Charging";
+            labelCCCharging.Click += labelCCCharging_Click;
+            labelCCCharging.MouseEnter += labelCCCharging_MouseEnter;
+            labelCCCharging.MouseLeave += labelCCCharging_MouseLeave;
             // 
             // labelCoils
             // 
@@ -335,27 +261,16 @@
             labelCoils.ForeColor = Color.White;
             labelCoils.Location = new Point(3, 13);
             labelCoils.Name = "labelCoils";
-            labelCoils.Size = new Size(53, 22);
+            labelCoils.Size = new Size(102, 22);
             labelCoils.TabIndex = 2;
-            labelCoils.Text = "Coils";
-            // 
-            // labelCapacitors
-            // 
-            labelCapacitors.AutoSize = true;
-            labelCapacitors.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
-            labelCapacitors.ForeColor = Color.White;
-            labelCapacitors.Location = new Point(3, 115);
-            labelCapacitors.Name = "labelCapacitors";
-            labelCapacitors.Size = new Size(102, 25);
-            labelCapacitors.TabIndex = 3;
-            labelCapacitors.Text = "Capacitors";
+            labelCoils.Text = "Capacitors";
             // 
             // labelOthers
             // 
             labelOthers.AutoSize = true;
             labelOthers.Font = new Font("Segoe UI Semibold", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
             labelOthers.ForeColor = Color.White;
-            labelOthers.Location = new Point(3, 220);
+            labelOthers.Location = new Point(3, 132);
             labelOthers.Name = "labelOthers";
             labelOthers.Size = new Size(69, 25);
             labelOthers.TabIndex = 10;
@@ -366,76 +281,31 @@
             tableLayoutPanel6.ColumnCount = 2;
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 15F));
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel6.Controls.Add(labelPowerSupply, 1, 0);
-            tableLayoutPanel6.Controls.Add(labelTopLoad, 1, 1);
-            tableLayoutPanel6.Controls.Add(labelRF, 1, 2);
-            tableLayoutPanel6.Controls.Add(labelPowerDissipation, 1, 3);
+            tableLayoutPanel6.Controls.Add(labelSkinEffect, 1, 0);
             tableLayoutPanel6.Dock = DockStyle.Fill;
-            tableLayoutPanel6.Location = new Point(3, 249);
+            tableLayoutPanel6.Location = new Point(3, 163);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
             tableLayoutPanel6.RowCount = 4;
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel6.Size = new Size(149, 138);
+            tableLayoutPanel6.Size = new Size(149, 237);
             tableLayoutPanel6.TabIndex = 11;
             // 
-            // labelPowerSupply
+            // labelSkinEffect
             // 
-            labelPowerSupply.AutoSize = true;
-            labelPowerSupply.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            labelPowerSupply.ForeColor = Color.White;
-            labelPowerSupply.Location = new Point(18, 0);
-            labelPowerSupply.Name = "labelPowerSupply";
-            labelPowerSupply.Size = new Size(116, 21);
-            labelPowerSupply.TabIndex = 4;
-            labelPowerSupply.Text = ">Power Supply";
-            labelPowerSupply.Click += labelPowerSupply_Click;
-            labelPowerSupply.MouseEnter += labelPowerSupply_MouseEnter;
-            labelPowerSupply.MouseLeave += labelPowerSupply_MouseLeave;
-            // 
-            // labelTopLoad
-            // 
-            labelTopLoad.AutoSize = true;
-            labelTopLoad.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            labelTopLoad.ForeColor = Color.White;
-            labelTopLoad.Location = new Point(18, 22);
-            labelTopLoad.Name = "labelTopLoad";
-            labelTopLoad.Size = new Size(75, 21);
-            labelTopLoad.TabIndex = 5;
-            labelTopLoad.Text = ">Topload";
-            labelTopLoad.Click += labelTopLoad_Click;
-            labelTopLoad.MouseEnter += labelTopLoad_MouseEnter;
-            labelTopLoad.MouseLeave += labelTopLoad_MouseLeave;
-            // 
-            // labelRF
-            // 
-            labelRF.AutoSize = true;
-            labelRF.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            labelRF.ForeColor = Color.White;
-            labelRF.Location = new Point(18, 44);
-            labelRF.Name = "labelRF";
-            labelRF.Size = new Size(96, 42);
-            labelRF.TabIndex = 6;
-            labelRF.Text = ">Resonance\r\n   Frequency";
-            labelRF.Click += labelRF_Click;
-            labelRF.MouseEnter += labelRF_MouseEnter;
-            labelRF.MouseLeave += labelRF_MouseLeave;
-            // 
-            // labelPowerDissipation
-            // 
-            labelPowerDissipation.AutoSize = true;
-            labelPowerDissipation.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            labelPowerDissipation.ForeColor = Color.White;
-            labelPowerDissipation.Location = new Point(18, 91);
-            labelPowerDissipation.Name = "labelPowerDissipation";
-            labelPowerDissipation.Size = new Size(99, 42);
-            labelPowerDissipation.TabIndex = 7;
-            labelPowerDissipation.Text = ">Power\r\n   Dissipation";
-            labelPowerDissipation.Click += labelPowerDissipation_Click;
-            labelPowerDissipation.MouseEnter += labelPowerDissipation_MouseEnter;
-            labelPowerDissipation.MouseLeave += labelPowerDissipation_MouseLeave;
+            labelSkinEffect.AutoSize = true;
+            labelSkinEffect.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            labelSkinEffect.ForeColor = Color.White;
+            labelSkinEffect.Location = new Point(18, 0);
+            labelSkinEffect.Name = "labelSkinEffect";
+            labelSkinEffect.Size = new Size(93, 21);
+            labelSkinEffect.TabIndex = 4;
+            labelSkinEffect.Text = ">Skin Effect";
+            labelSkinEffect.Click += labelSkinEffect_Click;
+            labelSkinEffect.MouseEnter += labelSkinEffect_MouseEnter;
+            labelSkinEffect.MouseLeave += labelSkinEffect_MouseLeave;
             // 
             // tableLayoutPanel3
             // 
@@ -476,13 +346,11 @@
             pictureBoxImage.Dock = DockStyle.Fill;
             pictureBoxImage.Location = new Point(3, 3);
             pictureBoxImage.Name = "pictureBoxImage";
-            pictureBoxImage.Size = new Size(214, 267);
+            pictureBoxImage.Size = new Size(328, 267);
             pictureBoxImage.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBoxImage.TabIndex = 6;
             pictureBoxImage.TabStop = false;
             pictureBoxImage.Tag = "0";
-            pictureBoxImage.MouseLeave += pictureBoxImage_MouseLeave;
-            pictureBoxImage.MouseMove += pictureBoxImage_MouseMove;
             // 
             // tableLayoutPanel7
             // 
@@ -492,7 +360,6 @@
             tableLayoutPanel7.Controls.Add(labelTitle, 1, 1);
             tableLayoutPanel7.Controls.Add(tableLayoutPanel8, 1, 2);
             tableLayoutPanel7.Controls.Add(pictureBox1, 0, 0);
-            tableLayoutPanel7.Controls.Add(button1, 1, 0);
             tableLayoutPanel7.Dock = DockStyle.Fill;
             tableLayoutPanel7.Location = new Point(155, 30);
             tableLayoutPanel7.Name = "tableLayoutPanel7";
@@ -518,8 +385,8 @@
             // tableLayoutPanel8
             // 
             tableLayoutPanel8.ColumnCount = 3;
-            tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 61.97183F));
-            tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 38.02817F));
+            tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 42.8571434F));
+            tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 57.1428566F));
             tableLayoutPanel8.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
             tableLayoutPanel8.Controls.Add(tableLayoutPanel9, 1, 0);
             tableLayoutPanel8.Controls.Add(tableLayoutPanel10, 0, 0);
@@ -538,47 +405,32 @@
             tableLayoutPanel9.Controls.Add(pictureBoxImage, 0, 0);
             tableLayoutPanel9.Controls.Add(panel2, 0, 1);
             tableLayoutPanel9.Dock = DockStyle.Fill;
-            tableLayoutPanel9.Location = new Point(372, 3);
+            tableLayoutPanel9.Location = new Point(258, 3);
             tableLayoutPanel9.Name = "tableLayoutPanel9";
             tableLayoutPanel9.RowCount = 2;
             tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 75.27174F));
             tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 24.72826F));
-            tableLayoutPanel9.Size = new Size(220, 363);
+            tableLayoutPanel9.Size = new Size(334, 363);
             tableLayoutPanel9.TabIndex = 7;
             // 
             // panel2
             // 
-            panel2.Controls.Add(pictureBoxTorus);
-            panel2.Controls.Add(pictureBoxSphere);
+            panel2.Controls.Add(button1);
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(3, 276);
             panel2.Name = "panel2";
-            panel2.Size = new Size(214, 84);
+            panel2.Size = new Size(328, 84);
             panel2.TabIndex = 7;
             // 
-            // pictureBoxTorus
+            // button1
             // 
-            pictureBoxTorus.Image = Properties.Resources.toroid;
-            pictureBoxTorus.Location = new Point(103, 17);
-            pictureBoxTorus.Name = "pictureBoxTorus";
-            pictureBoxTorus.Size = new Size(78, 50);
-            pictureBoxTorus.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBoxTorus.TabIndex = 1;
-            pictureBoxTorus.TabStop = false;
-            pictureBoxTorus.Visible = false;
-            pictureBoxTorus.Click += pictureBoxTorus_Click;
-            // 
-            // pictureBoxSphere
-            // 
-            pictureBoxSphere.Image = Properties.Resources.ball;
-            pictureBoxSphere.Location = new Point(34, 17);
-            pictureBoxSphere.Name = "pictureBoxSphere";
-            pictureBoxSphere.Size = new Size(50, 50);
-            pictureBoxSphere.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBoxSphere.TabIndex = 0;
-            pictureBoxSphere.TabStop = false;
-            pictureBoxSphere.Visible = false;
-            pictureBoxSphere.Click += pictureBoxSphere_Click;
+            button1.Location = new Point(111, 36);
+            button1.Name = "button1";
+            button1.Size = new Size(117, 23);
+            button1.TabIndex = 0;
+            button1.Text = "Generate Graphic";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // tableLayoutPanel10
             // 
@@ -602,7 +454,7 @@
             tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel10.Size = new Size(363, 363);
+            tableLayoutPanel10.Size = new Size(249, 363);
             tableLayoutPanel10.TabIndex = 8;
             // 
             // tableLayoutPanel11
@@ -679,7 +531,6 @@
             comboBox3.Size = new Size(55, 23);
             comboBox3.TabIndex = 7;
             comboBox3.Visible = false;
-            comboBox3.KeyPress += comboBox3_KeyPress;
             // 
             // comboBox2
             // 
@@ -689,7 +540,6 @@
             comboBox2.Size = new Size(55, 23);
             comboBox2.TabIndex = 6;
             comboBox2.Visible = false;
-            comboBox2.KeyPress += comboBox2_KeyPress;
             // 
             // textBox1
             // 
@@ -824,7 +674,6 @@
             comboBox4.Size = new Size(55, 23);
             comboBox4.TabIndex = 2;
             comboBox4.Visible = false;
-            comboBox4.KeyPress += comboBox4_KeyPress;
             // 
             // comboBox1
             // 
@@ -834,7 +683,6 @@
             comboBox1.Size = new Size(55, 23);
             comboBox1.TabIndex = 8;
             comboBox1.Visible = false;
-            comboBox1.KeyPress += comboBox1_KeyPress;
             // 
             // textBox5
             // 
@@ -853,7 +701,6 @@
             comboBox5.Size = new Size(55, 23);
             comboBox5.TabIndex = 14;
             comboBox5.Visible = false;
-            comboBox5.KeyPress += comboBox5_KeyPress;
             // 
             // textBox6
             // 
@@ -872,7 +719,6 @@
             comboBox6.Size = new Size(55, 23);
             comboBox6.TabIndex = 17;
             comboBox6.Visible = false;
-            comboBox6.KeyPress += comboBox6_KeyPress;
             // 
             // panel1
             // 
@@ -965,17 +811,6 @@
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 2;
             pictureBox1.TabStop = false;
-            pictureBox1.Click += pictureBox1_Click;
-            // 
-            // button1
-            // 
-            button1.Location = new Point(26, 3);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 15);
-            button1.TabIndex = 3;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
             // 
             // timerCalc
             // 
@@ -987,7 +822,7 @@
             // 
             toolTip10.Active = false;
             // 
-            // Calculator
+            // GraphicsCalculator
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -997,11 +832,10 @@
             Controls.Add(tableLayoutPanel2);
             Controls.Add(tableLayoutPanel1);
             FormBorderStyle = FormBorderStyle.None;
-            Icon = (Icon)resources.GetObject("$this.Icon");
-            Name = "Calculator";
+            Name = "GraphicsCalculator";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Form1";
-            Load += Form1_Load;
+            Load += GraphicsCalculator_Load;
             tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBoxIcon).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxClose).EndInit();
@@ -1010,8 +844,6 @@
             tableLayoutPanel2.PerformLayout();
             tableLayoutPanel5.ResumeLayout(false);
             tableLayoutPanel5.PerformLayout();
-            tableLayoutPanel4.ResumeLayout(false);
-            tableLayoutPanel4.PerformLayout();
             tableLayoutPanel6.ResumeLayout(false);
             tableLayoutPanel6.PerformLayout();
             tableLayoutPanel3.ResumeLayout(false);
@@ -1022,8 +854,6 @@
             tableLayoutPanel8.ResumeLayout(false);
             tableLayoutPanel9.ResumeLayout(false);
             panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)pictureBoxTorus).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBoxSphere).EndInit();
             tableLayoutPanel10.ResumeLayout(false);
             tableLayoutPanel11.ResumeLayout(false);
             tableLayoutPanel11.PerformLayout();
@@ -1042,19 +872,10 @@
         private TableLayoutPanel tableLayoutPanel2;
         private Label labelCoils;
         private TableLayoutPanel tableLayoutPanel5;
-        private Label labelConical;
-        private Label labelFlat;
-        private Label labelHelical;
-        private TableLayoutPanel tableLayoutPanel4;
-        private Label labeldVdt;
-        private Label labelCapacitance;
-        private Label labelVoltage;
-        private Label labelCapacitors;
+        private Label labelResistiveDischarging;
+        private Label labelCCDischarging;
+        private Label labelCCCharging;
         private Label labelOthers;
-        private TableLayoutPanel tableLayoutPanel6;
-        private Label labelPowerSupply;
-        private Label labelTopLoad;
-        private Label labelRF;
         private TableLayoutPanel tableLayoutPanel3;
         private Label label10;
         private Label label11;
@@ -1091,8 +912,6 @@
         private RadioButton radioButton3;
         private RadioButton radioButton2;
         private Panel panel2;
-        private PictureBox pictureBoxTorus;
-        private PictureBox pictureBoxSphere;
         private TextBox textBox1;
         private ToolTip toolTip1;
         private ToolTip toolTip3;
@@ -1104,9 +923,10 @@
         private ToolTip toolTip8_1;
         private ToolTip toolTip8_2;
         private ToolTip toolTip9;
-        private Label labelPowerDissipation;
         private PictureBox pictureBox1;
         private ToolTip toolTip10;
+        private TableLayoutPanel tableLayoutPanel6;
+        private Label labelSkinEffect;
         private Button button1;
     }
 }

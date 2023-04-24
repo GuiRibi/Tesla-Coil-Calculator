@@ -119,7 +119,7 @@
             label1.ForeColor = Color.White;
             label1.Location = new Point(55, 62);
             label1.Name = "label1";
-            label1.Size = new Size(367, 330);
+            label1.Size = new Size(371, 330);
             label1.TabIndex = 1;
             label1.Text = resources.GetString("label1.Text");
             // 

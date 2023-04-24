@@ -8,7 +8,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Tesla_Coil_Calculator
 {
-    public partial class Form1 : Form
+    public partial class Calculator : Form
     {
         string[] Inductance = { "H", "mH", "µH", "nH", "pH" };
         string[] Capacitance = { "F", "mF", "µF", "nF", "pF" };
@@ -40,7 +40,7 @@ namespace Tesla_Coil_Calculator
         Vector4[] Graphcalc;
         PointF[] pointFs;
 
-        public Form1()
+        public Calculator()
         {
             InitializeComponent();
         }
@@ -2380,57 +2380,85 @@ namespace Tesla_Coil_Calculator
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Array.Clear(Graphcalc, 0, Graphcalc.Length);
-            Array.Clear(pointFs, 0, Graphcalc.Length);
-            int i = 0;
+            GraphicsCalculator calculator = new GraphicsCalculator();
+            calculator.Show();
+            //Array.Clear(Graphcalc, 0, Graphcalc.Length);
+            //Array.Clear(pointFs, 0, Graphcalc.Length);
+            //int i = 0;
 
-            var penBlack = new Pen(Color.Black, 2);
+            //var penBlack = new Pen(Color.Black, 2);
 
-            penBlack.CustomEndCap = new AdjustableArrowCap(5, 5);
+            //penBlack.CustomEndCap = new AdjustableArrowCap(5, 5);
 
-            GraphCalc calc = new GraphCalc(0, 0, 0);
-            calc.TimeWindow(0.0000001, 0.3, 0, 1000);
-            for (double t = 0; t < calc.T; t = t + calc.T / pictureBoxImage.Width)
-            {
-                calc.Capacitor_Charging(0.0000001, 0.3, 0, t);
-                if ((float)calc.V * pictureBoxImage.Height / 1000 > 1000)
-                    break;
-                Vector4 vector = new Vector4(i, pictureBoxImage.Height - (float)calc.V * pictureBoxImage.Height / 1000, (float)calc.DeltaT, (float)calc.V);
-                Graphcalc[i] = vector;
+            //GraphCalc calc = new GraphCalc(0, 0, 0);
+            //calc.TimeWindow(0.0000001, 0.3, 0, 1000);
+            //for (double t = 0; t < calc.T; t = t + calc.T / pictureBoxImage.Width)
+            //{
+            //    calc.Capacitor_Charging(0.0000001, 0.3, 0, t);
+            //    if ((float)calc.V * pictureBoxImage.Height / 1000 > 1000)
+            //        break;
+            //    Vector4 vector = new Vector4(i, pictureBoxImage.Height - (float)calc.V * pictureBoxImage.Height / 1000, (float)calc.DeltaT, (float)calc.V);
+            //    Graphcalc[i] = vector;
 
-                pointFs[i] = Array.ConvertAll<Vector4, PointF>(new Vector4[] { vector }, v => new PointF(v.X, v.Y))[0];
-                i++;
-            }
+            //    pointFs[i] = Array.ConvertAll<Vector4, PointF>(new Vector4[] { vector }, v => new PointF(v.X, v.Y))[0];
+            //    i++;
+            //}
 
-            Bitmap btm = new Bitmap(pictureBoxImage.Width, pictureBoxImage.Height);
-            Graphics g = Graphics.FromImage(btm);
+            //Bitmap btm = new Bitmap(pictureBoxImage.Width, pictureBoxImage.Height);
+            //Graphics g = Graphics.FromImage(btm);
 
-            g.FillRectangle(Brushes.White, 0, 0, pictureBoxImage.Width, pictureBoxImage.Height);
+            //g.FillRectangle(Brushes.White, 0, 0, pictureBoxImage.Width, pictureBoxImage.Height);
 
-            g.DrawLines(new Pen(Brushes.Red, 2), pointFs);
-            g.DrawLine(penBlack, new Point(0, pictureBoxImage.Height - 4), new Point(pictureBoxImage.Width - 4, pictureBoxImage.Height - 4));
-            g.DrawLine(penBlack, new Point(4, pictureBoxImage.Height), new Point(4, 0));
-            g.DrawString("t = " + calc.T.ToString("0.0##E+0"), new Font("Segoe UI", 7), new SolidBrush(Color.Black), pictureBoxImage.Width - 60, pictureBoxImage.Height - 20);
-            pictureBoxImage.Image = btm;
+            //g.DrawLines(new Pen(Brushes.Red, 2), pointFs);
+            //g.DrawLine(penBlack, new Point(0, pictureBoxImage.Height - 4), new Point(pictureBoxImage.Width - 4, pictureBoxImage.Height - 4));
+            //g.DrawLine(penBlack, new Point(4, pictureBoxImage.Height), new Point(4, 0));
+            //g.DrawString("t = " + calc.T.ToString("0.0##E+0") + " s", new Font("Segoe UI", 7), new SolidBrush(Color.Black), pictureBoxImage.Width - 65, pictureBoxImage.Height - 20);
+            //g.DrawString("U = " + calc.V.ToString("0.0##E+0") + " V", new Font("Segoe UI", 7), new SolidBrush(Color.Black), 10, 10);
+            //pictureBoxImage.Image = btm;
 
-            image = pictureBoxImage.Image;
+            //image = pictureBoxImage.Image;
         }
         Image image;
         private void pictureBoxImage_MouseMove(object sender, MouseEventArgs e)
         {
-            
-            foreach (Vector4 graph in Graphcalc)
-            {
-                if(graph.X == e.X)
-                {
-                    Bitmap btm = new Bitmap(pictureBoxImage.Width, pictureBoxImage.Height);
-                    Graphics g = Graphics.FromImage(btm);
-                    g.DrawImage(image, 0, 0);
-                    g.DrawString(graph.Z.ToString("0.0##E+0"), new Font("Segoe UI", 7), new SolidBrush(Color.Black), 100, 100);
-                    textBox1.Text = graph.Z.ToString("0.0##E+0") + " + " + graph.W.ToString("0.0##E+0");
-                    pictureBoxImage.Image = btm;
-                }
-            }
+            //int X;
+            //int Y;
+
+            //if (e.X > pictureBoxImage.Width / 2)
+            //    X = e.X - pictureBoxImage.Width / 2;
+            //else
+            //    X = e.X + 5;
+
+            //if (e.Y < 20)
+            //    Y = e.Y + 10;
+            //else
+            //    Y = e.Y - 10;
+
+            //foreach (Vector4 graph in Graphcalc)
+            //{
+            //    if (graph.X == e.X)
+            //    {
+            //        Bitmap btm = new Bitmap(pictureBoxImage.Width, pictureBoxImage.Height);
+            //        Graphics g = Graphics.FromImage(btm);
+            //        g.DrawImage(image, 0, 0);
+            //        g.DrawLine(Pens.Black, graph.X, graph.Y, 0, graph.Y);
+            //        g.DrawLine(Pens.Black, graph.X, graph.Y, graph.X, pictureBoxImage.Height);
+
+            //        g.DrawString("(" + graph.Z.ToString("0.0##E+0") + " s, " + graph.W.ToString("0.0##E+0") + " V)", new Font("Segoe UI", 7), new SolidBrush(Color.Black), X, Y);
+            //        textBox1.Text = graph.Z.ToString("0.0##E+0") + " + " + graph.W.ToString("0.0##E+0");
+            //        pictureBoxImage.Image = btm;
+            //    }
+            //}
+        }
+
+        private void pictureBoxImage_MouseLeave(object sender, EventArgs e)
+        {
+            //Bitmap btm = new Bitmap(pictureBoxImage.Width, pictureBoxImage.Height);
+            //Graphics g = Graphics.FromImage(btm);
+
+            //g.DrawImage(image, 0, 0);
+
+            //pictureBoxImage.Image = btm;
         }
     }
 }

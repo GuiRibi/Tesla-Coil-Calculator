@@ -44,6 +44,11 @@ namespace Tesla_Coil_Calculator
         {
 
         }
+
+        private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
+        {
+
+        }
     }
 }
 
