@@ -83,6 +83,16 @@ namespace Tesla_Coil_Calculator.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ChangedValues {
+            get {
+                object obj = ResourceManager.GetObject("ChangedValues", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Conical {
             get {
                 object obj = ResourceManager.GetObject("Conical", resourceCulture);

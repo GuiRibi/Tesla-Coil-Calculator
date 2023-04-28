@@ -11,11 +11,15 @@ namespace Tesla_Coil_Calculator
         public double V;
         public double T;
         public double DeltaT;
-        public GraphCalc(double v, double t, double deltat)
+        public double Depth;
+        public double Resistance;
+        public GraphCalc(double v, double t, double deltat, double depth, double resistance)
         { 
             V = v;
             T = t;
             DeltaT = deltat;
+            Depth = depth;
+            Resistance = resistance;
         }
 
         //Capacitor Changing(Constant Current)
@@ -47,6 +51,19 @@ namespace Tesla_Coil_Calculator
         {
             DeltaT = t;
             V = U1 / Math.Pow(Math.E, (t / (R * C)));
+        }
+
+        //Skin Effect
+        public void Skin_Depth(double R, double f, double Rp)
+        {
+            Depth = Math.Sqrt(R / (Math.PI * f * 4 * Math.PI * Math.Pow(10, -7) * Rp));
+        }
+
+        public void Skin_Effect(double depth, double f, double Rp)
+        {
+            //Resistance = Math.Sqrt(depth * depth * Math.Pow(Math.PI * f * 4 * Math.PI * Math.Pow(10, -7) * Rp, 2));
+            double r = depth * Math.Sqrt(Math.PI * f * 4 * Math.PI * Math.Pow(10, -7) * Rp);
+            Resistance = r * r;
         }
     }
 }
