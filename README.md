@@ -11,7 +11,13 @@ Select an option from the tab on the left.>> Click on the Radiobutton with the v
 # Download & intallation
 Download and extract [this Zip file](https://github.com/GuiRibi/Tesla-Coil-Calculator/blob/1.1.0/Tesla%20Coil%20Calculator.zip) and run ***Tesla Coil Calculator.exe***
 
+# How to access Beta features
+On the main form, there will be a button on the top-left corner named "button1".
+Click it and form 2 will be opened.
+
 # Change Log
 * Added **Constant current capacitor charging/discharging** calclulator (DEV);
 * Added **Resistive discharging** calclulator (DEV);
+* Added **Skin effect** calclulator (DEV);
 * Added **Graphical Calculator** support (DEV).
+* Added option for user intput (only units from the international system of units are used).
