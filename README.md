@@ -20,4 +20,7 @@ Click it and form 2 will be opened.
 * Added **Resistive discharging** calclulator (DEV);
 * Added **Skin effect** calclulator (DEV);
 * Added **Graphical Calculator** support (DEV).
-* Added option for user intput (only units from the international system of units are used).
+* Added option for user intput (Now with more units available).
+* Added option for variable resolution (on the Gear icon on the top left corner of the graphical calculator form).
+* Added option for variable font size (on the Gear icon on the top left corner of the graphical calculator form).
+* Added Shadows to the application for better visualisation and distinction between forms.
