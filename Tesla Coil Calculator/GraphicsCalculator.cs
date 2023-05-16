@@ -13,18 +13,34 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Net.Mime.MediaTypeNames;
+using System.Linq;
 
 namespace Tesla_Coil_Calculator
 {
+    public delegate void NotifyEvent();
+
     public partial class GraphicsCalculator : Form
     {
-        string[] Inductance = { "H", "mH", "µH", "nH", "pH" };
+        private const int CS_DROPSHADOW = 0x00020000;
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                // add the drop shadow flag for automatically drawing
+                // a drop shadow around the form
+                CreateParams cp = base.CreateParams;
+                cp.ClassStyle |= CS_DROPSHADOW;
+                return cp;
+            }
+        }
+
+        string[] Resistance_ohms_meter = { "Ω.m", "Ω.cm" };
         string[] Capacitance = { "F", "mF", "µF", "nF", "pF" };
         string[] Frequency = { "Hz", "KHz", "MHz", "GHz" };
         string[] Resistance = { "mΩ", "Ω", "KΩ", "MΩ" };
-        string[] Angle = { "º", "Rad" };
         string[] Units = { "mm", "in" };
 
+        public NotifyEvent notifyDelegate;
         public const int WM_NCLBUTTONDOWN = 0xA1;
         public const int HT_CAPTION = 0x2;
 
@@ -44,29 +60,50 @@ namespace Tesla_Coil_Calculator
         double d6;
 
         int width;
+        int font = 7;
+        int ccp = 1;
 
         double CalcT;
         double CalcV;
+        float DepthInPixels;
 
         bool valueschanged = false;
+        bool MouseisInside = false;
 
-        Vector3[] Graphcalc3;
-        Vector4[] Graphcalc4;
+        int mouseX;
+        int mouseY;
+
+        //Vector3[] Graphcalc3;
+        //Vector4[] Graphcalc4;
         PointF[] pointFs;
-        Vector4[] colors;
+        //Vector4[] colors;
+        //Vector4[] bars;
+
+        //List<PointF> pointFs = new List<PointF>();
+        List<Vector3> Graphcalc3 = new List<Vector3>();
+        List<Vector4> Graphcalc4 = new List<Vector4>();
+        List<Vector4> colors = new List<Vector4>();
+        List<Vector4> bars = new List<Vector4>();
+        List<Vector4> vector4s = new List<Vector4>();
+        List<Vector4> Convertedvector4s = new List<Vector4>();
+
+        Settings settings;
 
         public GraphicsCalculator()
         {
             InitializeComponent();
+
+            notifyDelegate = new NotifyEvent(ChangeValues);
         }
 
         private void GraphicsCalculator_Load(object sender, EventArgs e)
         {
             width = pictureBoxImage.Width;
-            Graphcalc3 = new Vector3[1000 + 1];
-            Graphcalc4 = new Vector4[width + 1];
-            pointFs = new PointF[width + 1];
-            colors = new Vector4[1000 + 1];
+            //Graphcalc3 = new Vector3[(int)(ccp * pictureBoxImage.Width / 1.5) + 1];
+            //Graphcalc4 = new Vector4[ccp * pictureBoxImage.Width + 1];
+            pointFs = new PointF[ccp * (pictureBoxImage.Width - 4) + 1];
+            //colors = new Vector4[(int)(ccp * pictureBoxImage.Width / 1.5) + 1];
+            //bars = new Vector4[(int)(ccp * pictureBoxImage.Width / 1.5) + 1];
         }
 
         private void tableLayoutPanel1_MouseDown(object sender, MouseEventArgs e)
@@ -136,7 +173,7 @@ namespace Tesla_Coil_Calculator
             textBox3.Visible = true;
             textBox4.Visible = true;
             textBox5.Visible = true;
-            textBox6.Visible = true;
+            textBox6.Visible = false;
 
             textBox1.Text = null;
             textBox2.Text = null;
@@ -153,11 +190,11 @@ namespace Tesla_Coil_Calculator
             comboBox5.Visible = true;
             comboBox6.Visible = false;
 
-            comboBox1.Enabled = false;
-            comboBox2.Enabled = true;
-            comboBox3.Enabled = true;
-            comboBox4.Enabled = true;
-            comboBox5.Enabled = true;
+            comboBox1.Enabled = true;
+            comboBox2.Enabled = false;
+            comboBox3.Enabled = false;
+            comboBox4.Enabled = false;
+            comboBox5.Enabled = false;
             comboBox6.Enabled = false;
 
             comboBox1.Items.Clear();
@@ -167,28 +204,27 @@ namespace Tesla_Coil_Calculator
             comboBox5.Items.Clear();
             comboBox6.Items.Clear();
 
-            comboBox1.Text = "Turns";
-            comboBox2.Items.AddRange(Units);
-            comboBox3.Items.AddRange(Units);
-            comboBox4.Items.AddRange(Inductance);
+            comboBox1.Items.AddRange(Capacitance);
+            comboBox2.Text = "A";
+            comboBox3.Text = "V";
+            comboBox4.Text = "V";
+            comboBox5.Text = "s";
 
-            comboBox2.SelectedIndex = 0;
-            comboBox3.SelectedIndex = 0;
-            comboBox4.SelectedIndex = 0;
+            comboBox1.SelectedIndex = 0;
 
             //Radiobutton
-            radioButton1.Visible = true;
+            radioButton1.Visible = false;
             radioButton2.Visible = false;
             radioButton3.Visible = false;
-            radioButton4.Visible = true;
-            radioButton5.Visible = true;
+            radioButton4.Visible = false;
+            radioButton5.Visible = false;
             radioButton6.Visible = false;
 
             radioButton1.Checked = false;
             radioButton2.Checked = false;
             radioButton3.Checked = false;
             radioButton4.Checked = false;
-            radioButton5.Checked = false;
+            radioButton5.Checked = true;
             radioButton6.Checked = false;
 
             //Label
@@ -221,7 +257,7 @@ namespace Tesla_Coil_Calculator
             textBox2.Visible = true;
             textBox3.Visible = true;
             textBox4.Visible = true;
-            textBox5.Visible = false;
+            textBox5.Visible = true;
             textBox6.Visible = false;
 
             textBox1.Text = null;
@@ -236,13 +272,13 @@ namespace Tesla_Coil_Calculator
             comboBox2.Visible = true;
             comboBox3.Visible = true;
             comboBox4.Visible = true;
-            comboBox5.Visible = false;
+            comboBox5.Visible = true;
             comboBox6.Visible = false;
 
-            comboBox1.Enabled = false;
-            comboBox2.Enabled = true;
-            comboBox3.Enabled = true;
-            comboBox4.Enabled = true;
+            comboBox1.Enabled = true;
+            comboBox2.Enabled = false;
+            comboBox3.Enabled = false;
+            comboBox4.Enabled = false;
             comboBox5.Enabled = false;
             comboBox6.Enabled = false;
 
@@ -253,20 +289,21 @@ namespace Tesla_Coil_Calculator
             comboBox5.Items.Clear();
             comboBox6.Items.Clear();
 
-            comboBox1.Text = "Turns";
-            comboBox2.Items.AddRange(Units);
-            comboBox3.Items.AddRange(Units);
-            comboBox4.Items.AddRange(Inductance);
+            comboBox1.Items.AddRange(Capacitance);
+            comboBox2.Text = "A";
+            comboBox3.Text = "V";
+            comboBox4.Text = "V";
+            comboBox5.Text = "s";
 
             comboBox2.SelectedIndex = 0;
             comboBox3.SelectedIndex = 0;
             comboBox4.SelectedIndex = 0;
 
             //Radiobutton
-            radioButton1.Visible = true;
+            radioButton1.Visible = false;
             radioButton2.Visible = false;
             radioButton3.Visible = false;
-            radioButton4.Visible = true;
+            radioButton4.Visible = false;
             radioButton5.Visible = false;
             radioButton6.Visible = false;
 
@@ -282,7 +319,7 @@ namespace Tesla_Coil_Calculator
             label2.Visible = true;
             label3.Visible = true;
             label4.Visible = true;
-            label5.Visible = false;
+            label5.Visible = true;
             label6.Visible = false;
 
             labelTitle.Text = "Constant Current Discharging";
@@ -291,6 +328,7 @@ namespace Tesla_Coil_Calculator
             label2.Text = "I";
             label3.Text = "U1";
             label4.Text = "U2";
+            label5.Text = "T";
         }
 
         private void labelResistiveDischarging_Click(object sender, EventArgs e)
@@ -306,7 +344,7 @@ namespace Tesla_Coil_Calculator
             textBox2.Visible = true;
             textBox3.Visible = true;
             textBox4.Visible = true;
-            textBox5.Visible = false;
+            textBox5.Visible = true;
             textBox6.Visible = false;
 
             textBox1.Text = null;
@@ -321,13 +359,13 @@ namespace Tesla_Coil_Calculator
             comboBox2.Visible = true;
             comboBox3.Visible = true;
             comboBox4.Visible = true;
-            comboBox5.Visible = false;
+            comboBox5.Visible = true;
             comboBox6.Visible = false;
 
-            comboBox1.Enabled = false;
+            comboBox1.Enabled = true;
             comboBox2.Enabled = true;
-            comboBox3.Enabled = true;
-            comboBox4.Enabled = true;
+            comboBox3.Enabled = false;
+            comboBox4.Enabled = false;
             comboBox5.Enabled = false;
             comboBox6.Enabled = false;
 
@@ -338,20 +376,20 @@ namespace Tesla_Coil_Calculator
             comboBox5.Items.Clear();
             comboBox6.Items.Clear();
 
-            comboBox1.Text = "Turns";
-            comboBox2.Items.AddRange(Units);
-            comboBox3.Items.AddRange(Units);
-            comboBox4.Items.AddRange(Inductance);
+            comboBox1.Items.AddRange(Capacitance);
+            comboBox2.Items.AddRange(Resistance);
+            comboBox3.Text = "V";
+            comboBox4.Text = "V";
+            comboBox5.Text = "s";
 
+            comboBox1.SelectedIndex = 0;
             comboBox2.SelectedIndex = 0;
-            comboBox3.SelectedIndex = 0;
-            comboBox4.SelectedIndex = 0;
 
             //Radiobutton
-            radioButton1.Visible = true;
+            radioButton1.Visible = false;
             radioButton2.Visible = false;
             radioButton3.Visible = false;
-            radioButton4.Visible = true;
+            radioButton4.Visible = false;
             radioButton5.Visible = false;
             radioButton6.Visible = false;
 
@@ -367,7 +405,7 @@ namespace Tesla_Coil_Calculator
             label2.Visible = true;
             label3.Visible = true;
             label4.Visible = true;
-            label5.Visible = false;
+            label5.Visible = true;
             label6.Visible = false;
 
             labelTitle.Text = "Resistive Discharging";
@@ -376,6 +414,7 @@ namespace Tesla_Coil_Calculator
             label2.Text = "R";
             label3.Text = "U1";
             label4.Text = "U2";
+            label5.Text = "T";
         }
 
         private void labelSkinEffect_Click(object sender, EventArgs e)
@@ -409,9 +448,9 @@ namespace Tesla_Coil_Calculator
             comboBox5.Visible = true;
             comboBox6.Visible = false;
 
-            comboBox1.Enabled = false;
+            comboBox1.Enabled = true;
             comboBox2.Enabled = true;
-            comboBox3.Enabled = true;
+            comboBox3.Enabled = false;
             comboBox4.Enabled = true;
             comboBox5.Enabled = true;
             comboBox6.Enabled = false;
@@ -423,20 +462,22 @@ namespace Tesla_Coil_Calculator
             comboBox5.Items.Clear();
             comboBox6.Items.Clear();
 
-            comboBox1.Text = "Turns";
-            comboBox2.Items.AddRange(Units);
-            comboBox3.Items.AddRange(Units);
-            comboBox4.Items.AddRange(Inductance);
+            comboBox1.Items.AddRange(Units);
+            comboBox2.Items.AddRange(Resistance_ohms_meter);
+            comboBox3.Text = null;
+            comboBox4.Items.AddRange(Frequency);
+            comboBox5.Items.AddRange(Units);
 
+            comboBox1.SelectedIndex = 0;
             comboBox2.SelectedIndex = 0;
-            comboBox3.SelectedIndex = 0;
             comboBox4.SelectedIndex = 0;
+            comboBox5.SelectedIndex = 0;
 
             //Radiobutton
-            radioButton1.Visible = true;
+            radioButton1.Visible = false;
             radioButton2.Visible = false;
             radioButton3.Visible = false;
-            radioButton4.Visible = true;
+            radioButton4.Visible = false;
             radioButton5.Visible = false;
             radioButton6.Visible = false;
 
@@ -457,7 +498,7 @@ namespace Tesla_Coil_Calculator
 
             labelTitle.Text = "Helical Coil";
 
-            label1.Text = "R";
+            label1.Text = "D";
             label2.Text = "ρ";
             label3.Text = "μ";
             label4.Text = "F";
@@ -697,7 +738,7 @@ namespace Tesla_Coil_Calculator
                         }
                         return;
                     }
-                       
+
                 }
                 if (!isNumeric && e.KeyChar == '\u0016')
                 {
@@ -707,7 +748,7 @@ namespace Tesla_Coil_Calculator
                 else
                     e.Handled = true;
             }
-            if(char.IsDigit(e.KeyChar) || e.KeyChar == '.' && !textBox6.Text.Contains(".") || e.KeyChar == (char)Keys.Back)
+            if (char.IsDigit(e.KeyChar) || e.KeyChar == '.' && !textBox6.Text.Contains(".") || e.KeyChar == (char)Keys.Back)
             {
                 if (Graphcalc3 != null || Graphcalc4 != null)
                 {
@@ -718,28 +759,38 @@ namespace Tesla_Coil_Calculator
 
         private void timerCalc_Tick(object sender, EventArgs e)
         {
-            var penBlack = new Pen(Color.Black, 2);
-            penBlack.CustomEndCap = new AdjustableArrowCap(5, 5);
+            var pen2Black = new Pen(Color.Black, 2);
+            var pen1Black = new Pen(Color.Black);
+            pen2Black.CustomEndCap = new AdjustableArrowCap(5, 5);
+            pen1Black.CustomStartCap = new AdjustableArrowCap(3, 3);
+            pen1Black.CustomEndCap = new AdjustableArrowCap(3, 3);
             try
             {
                 switch (pictureBoxImage.Tag)
                 {
                     case "1":
+                        GraphCalc calc1 = new GraphCalc(0, 0, 0, 0, 0);
                         try
                         {
                             d1 = Convert.ToDouble(textBox1.Text);
+                            if (comboBox1.SelectedIndex == 1)
+                                d1 = d1 * Math.Pow(10, -3);
+                            if (comboBox1.SelectedIndex == 2)
+                                d1 = d1 * Math.Pow(10, -6);
+                            if (comboBox1.SelectedIndex == 3)
+                                d1 = d1 * Math.Pow(10, -9);
+                            if (comboBox1.SelectedIndex == 4)
+                                d1 = d1 * Math.Pow(10, -12);
                             d2 = Convert.ToDouble(textBox2.Text);
                             d3 = Convert.ToDouble(textBox3.Text);
                             d4 = Convert.ToDouble(textBox4.Text);
+
+                            calc1.TimeWindow(d1, d2, d3, d4);
+                            textBox5.Text = calc1.T.ToString("0.0#####E+0");
                         }
                         catch
                         {
                         }
-
-                        GraphCalc calc1 = new GraphCalc(0, 0, 0, 0, 0);
-                        calc1.TimeWindow(d1, d2, d3, d4);
-                        d5 = calc1.T;
-                        textBox5.Text = d5.ToString("0.0#####E+0");
 
                         Bitmap btm1 = new Bitmap(pictureBoxImage.Width, pictureBoxImage.Height);
                         Graphics g1 = Graphics.FromImage(btm1);
@@ -747,25 +798,66 @@ namespace Tesla_Coil_Calculator
                         g1.FillRectangle(Brushes.White, 0, 0, pictureBoxImage.Width, pictureBoxImage.Height);
 
                         g1.DrawLines(new Pen(Brushes.Red, 2), pointFs);
-                        g1.DrawLine(penBlack, new Point(0, pictureBoxImage.Height - 4), new Point(pictureBoxImage.Width - 4, pictureBoxImage.Height - 4));
-                        g1.DrawLine(penBlack, new Point(4, pictureBoxImage.Height), new Point(4, 0));
-                        g1.DrawString("t = " + CalcT.ToString("0.0##E+0") + " s", new Font("Segoe UI", 7), new SolidBrush(Color.Black), pictureBoxImage.Width - 65, pictureBoxImage.Height - 20);
-                        g1.DrawString("U = " + CalcV.ToString("0.0##E+0") + " V", new Font("Segoe UI", 7), new SolidBrush(Color.Black), 10, 10);
+                        g1.DrawLine(pen2Black, new Point(0, pictureBoxImage.Height - 4), new Point(pictureBoxImage.Width - 4, pictureBoxImage.Height - 4));
+                        g1.DrawLine(pen2Black, new Point(4, pictureBoxImage.Height), new Point(4, 0));
+                        g1.DrawString("t = " + CalcT.ToString("0.0##E+0") + " s", new Font("Segoe UI", font), new SolidBrush(Color.Black), pictureBoxImage.Width - 80, pictureBoxImage.Height - 20);
+                        g1.DrawString("U = " + CalcV.ToString("0.0##E+0") + " V", new Font("Segoe UI", font), new SolidBrush(Color.Black), 10, 10);
 
                         if (valueschanged)
                         {
                             g1.DrawImage(Properties.Resources.ChangedValues, 0, 0, pictureBoxImage.Width, pictureBoxImage.Height);
                         }
 
+                        if (MouseisInside)
+                        {
+                            int X;
+                            int Y;
+
+                            if (mouseX > pictureBoxImage.Width / 2)
+                                X = mouseX - pictureBoxImage.Width / 2 + 15;
+                            else
+                                X = mouseX + 5;
+
+                            if (mouseY < 20)
+                                Y = mouseY + 10;
+                            else
+                                Y = mouseY - 10;
+
+                            foreach (Vector4 graph in Graphcalc4)
+                            {
+                                if (graph.X == mouseX)
+                                {
+                                    g1.DrawLine(Pens.Black, graph.X, graph.Y, 0, graph.Y);
+                                    g1.DrawLine(Pens.Black, graph.X, graph.Y, graph.X, pictureBoxImage.Height);
+
+                                    g1.DrawString("(" + graph.Z.ToString("0.0###E+0") + " s, " + graph.W.ToString("0.0###E+0") + " V)", new Font("Segoe UI", font), new SolidBrush(Color.Black), X, Y);
+
+                                    break;
+                                }
+                            }
+                        }
+
                         pictureBoxImage.Image = btm1;
                         break;
                     case "2":
+                        GraphCalc calc2 = new GraphCalc(0, 0, 0, 0, 0);
                         try
                         {
                             d1 = Convert.ToDouble(textBox1.Text);
+                            if (comboBox1.SelectedIndex == 1)
+                                d1 = d1 * Math.Pow(10, -3);
+                            if (comboBox1.SelectedIndex == 2)
+                                d1 = d1 * Math.Pow(10, -6);
+                            if (comboBox1.SelectedIndex == 3)
+                                d1 = d1 * Math.Pow(10, -9);
+                            if (comboBox1.SelectedIndex == 4)
+                                d1 = d1 * Math.Pow(10, -12);
                             d2 = Convert.ToDouble(textBox2.Text);
                             d3 = Convert.ToDouble(textBox3.Text);
                             d4 = Convert.ToDouble(textBox4.Text);
+
+                            calc2.TimeWindow(d1, -d2, d3, d4);
+                            textBox5.Text = calc2.T.ToString("0.0#####E+0");
                         }
                         catch
                         {
@@ -777,25 +869,72 @@ namespace Tesla_Coil_Calculator
                         g2.FillRectangle(Brushes.White, 0, 0, pictureBoxImage.Width, pictureBoxImage.Height);
 
                         g2.DrawLines(new Pen(Brushes.Red, 2), pointFs);
-                        g2.DrawLine(penBlack, new Point(0, pictureBoxImage.Height - 4), new Point(pictureBoxImage.Width - 4, pictureBoxImage.Height - 4));
-                        g2.DrawLine(penBlack, new Point(4, pictureBoxImage.Height), new Point(4, 0));
-                        g2.DrawString("t = " + CalcT.ToString("0.0##E+0") + " s", new Font("Segoe UI", 7), new SolidBrush(Color.Black), pictureBoxImage.Width - 65, pictureBoxImage.Height - 20);
-                        g2.DrawString("U = " + CalcV.ToString("0.0##E+0") + " V", new Font("Segoe UI", 7), new SolidBrush(Color.Black), 10, 10);
+                        g2.DrawLine(pen2Black, new Point(0, pictureBoxImage.Height - 4), new Point(pictureBoxImage.Width - 4, pictureBoxImage.Height - 4));
+                        g2.DrawLine(pen2Black, new Point(4, pictureBoxImage.Height), new Point(4, 0));
+                        g2.DrawString("t = " + CalcT.ToString("0.0##E+0") + " s", new Font("Segoe UI", font), new SolidBrush(Color.Black), pictureBoxImage.Width - 80, pictureBoxImage.Height - 20);
+                        g2.DrawString("U = " + CalcV.ToString("0.0##E+0") + " V", new Font("Segoe UI", font), new SolidBrush(Color.Black), 10, 10);
 
                         if (valueschanged)
                         {
                             g2.DrawImage(Properties.Resources.ChangedValues, 0, 0, pictureBoxImage.Width, pictureBoxImage.Height);
                         }
 
+                        if (MouseisInside)
+                        {
+                            int X;
+                            int Y;
+
+                            if (mouseX > pictureBoxImage.Width / 2)
+                                X = mouseX - pictureBoxImage.Width / 2 + 15;
+                            else
+                                X = mouseX + 5;
+
+                            if (mouseY < 20)
+                                Y = mouseY + 10;
+                            else
+                                Y = mouseY - 10;
+
+                            foreach (Vector4 graph in Graphcalc4)
+                            {
+                                if (graph.X == mouseX)
+                                {
+                                    g2.DrawLine(Pens.Black, graph.X, graph.Y, 0, graph.Y);
+                                    g2.DrawLine(Pens.Black, graph.X, graph.Y, graph.X, pictureBoxImage.Height);
+
+                                    g2.DrawString("(" + graph.Z.ToString("0.0###E+0") + " s, " + graph.W.ToString("0.0###E+0") + " V)", new Font("Segoe UI", font), new SolidBrush(Color.Black), X, Y);
+
+                                    break;
+                                }
+                            }
+                        }
+
                         pictureBoxImage.Image = btm2;
                         break;
                     case "3":
+                        GraphCalc calc3 = new GraphCalc(0, 0, 0, 0, 0);
                         try
                         {
                             d1 = Convert.ToDouble(textBox1.Text);
+                            if (comboBox1.SelectedIndex == 1)
+                                d1 = d1 * Math.Pow(10, -3);
+                            if (comboBox1.SelectedIndex == 2)
+                                d1 = d1 * Math.Pow(10, -6);
+                            if (comboBox1.SelectedIndex == 3)
+                                d1 = d1 * Math.Pow(10, -9);
+                            if (comboBox1.SelectedIndex == 4)
+                                d1 = d1 * Math.Pow(10, -12);
                             d2 = Convert.ToDouble(textBox2.Text);
+                            if (comboBox2.SelectedIndex == 0)
+                                d2 = d2 * Math.Pow(10, -3);
+                            if (comboBox2.SelectedIndex == 2)
+                                d2 = d2 * Math.Pow(10, 3);
+                            if (comboBox2.SelectedIndex == 3)
+                                d2 = d2 * Math.Pow(10, 6);
                             d3 = Convert.ToDouble(textBox3.Text);
                             d4 = Convert.ToDouble(textBox4.Text);
+
+                            calc3.TimeWindow_RC(d1, d2, d3, d4);
+                            textBox5.Text = calc3.T.ToString("0.0#####E+0");
                         }
                         catch
                         {
@@ -807,44 +946,175 @@ namespace Tesla_Coil_Calculator
                         g3.FillRectangle(Brushes.White, 0, 0, pictureBoxImage.Width, pictureBoxImage.Height);
 
                         g3.DrawLines(new Pen(Brushes.Red, 2), pointFs);
-                        g3.DrawLine(penBlack, new Point(0, pictureBoxImage.Height - 4), new Point(pictureBoxImage.Width - 4, pictureBoxImage.Height - 4));
-                        g3.DrawLine(penBlack, new Point(4, pictureBoxImage.Height), new Point(4, 0));
-                        g3.DrawString("t = " + CalcT.ToString("0.0##E+0") + " s", new Font("Segoe UI", 7), new SolidBrush(Color.Black), pictureBoxImage.Width - 65, pictureBoxImage.Height - 20);
-                        g3.DrawString("U = " + CalcV.ToString("0.0##E+0") + " V", new Font("Segoe UI", 7), new SolidBrush(Color.Black), 10, 10);
+                        g3.DrawLine(pen2Black, new Point(0, pictureBoxImage.Height - 4), new Point(pictureBoxImage.Width - 4, pictureBoxImage.Height - 4));
+                        g3.DrawLine(pen2Black, new Point(4, pictureBoxImage.Height), new Point(4, 0));
+                        g3.DrawString("t = " + CalcT.ToString("0.0##E+0") + " s", new Font("Segoe UI", font), new SolidBrush(Color.Black), pictureBoxImage.Width - 80, pictureBoxImage.Height - 20);
+                        g3.DrawString("U = " + CalcV.ToString("0.0##E+0") + " V", new Font("Segoe UI", font), new SolidBrush(Color.Black), 10, 10);
 
                         if (valueschanged)
                         {
                             g3.DrawImage(Properties.Resources.ChangedValues, 0, 0, pictureBoxImage.Width, pictureBoxImage.Height);
                         }
 
+                        if (MouseisInside)
+                        {
+                            int X;
+                            int Y;
+
+                            if (mouseX > pictureBoxImage.Width / 2)
+                                X = mouseX - pictureBoxImage.Width / 2 + 15;
+                            else
+                                X = mouseX + 5;
+
+                            if (mouseY < 20)
+                                Y = mouseY + 10;
+                            else
+                                Y = mouseY - 10;
+
+                            foreach (Vector4 graph in Graphcalc4)
+                            {
+                                if (graph.X == mouseX)
+                                {
+                                    g3.DrawLine(Pens.Black, graph.X, graph.Y, 0, graph.Y);
+                                    g3.DrawLine(Pens.Black, graph.X, graph.Y, graph.X, pictureBoxImage.Height);
+
+                                    g3.DrawString("(" + graph.Z.ToString("0.0###E+0") + " s, " + graph.W.ToString("0.0###E+0") + " V)", new Font("Segoe UI", font), new SolidBrush(Color.Black), X, Y);
+
+                                    break;
+                                }
+                            }
+                        }
+
                         pictureBoxImage.Image = btm3;
                         break;
                     case "4":
+                        GraphCalc calc4 = new GraphCalc(0, 0, 0, 0, 0);
                         try
                         {
                             d1 = Convert.ToDouble(textBox1.Text);
+                            if (comboBox1.SelectedIndex == 0)
+                                d1 = d1 * Math.Pow(10, -3);
+                            if (comboBox1.SelectedIndex == 1)
+                                d1 = d1 * 25.4 * Math.Pow(10, -3);
+
                             d2 = Convert.ToDouble(textBox2.Text);
+                            if (comboBox2.SelectedIndex == 1)
+                                d2 = d2 * Math.Pow(10, -2);
                             d3 = Convert.ToDouble(textBox3.Text);
                             d4 = Convert.ToDouble(textBox4.Text);
+                            if (comboBox4.SelectedIndex == 1)
+                                d4 = d4 * Math.Pow(10, 3);
+                            if (comboBox4.SelectedIndex == 2)
+                                d4 = d4 * Math.Pow(10, 6);
+                            if (comboBox4.SelectedIndex == 3)
+                                d4 = d4 * Math.Pow(10, 9);
+                            if (comboBox4.SelectedIndex == 4)
+                                d4 = d4 * Math.Pow(10, 12);
+
+                            calc4.Skin_Depth(d2, d4, d3);
+                            if (d1 > calc4.Depth)
+                            {
+                                if(comboBox5.SelectedIndex == 0)
+                                    textBox5.Text = (calc4.Depth * Math.Pow(10, 3)).ToString("0.0#####E+0");
+                                if (comboBox5.SelectedIndex == 1)
+                                    textBox5.Text = (calc4.Depth * Math.Pow(10, 3) / 25.4).ToString("0.0#####E+0");
+                            }
+                                
+                            else
+                            {
+                                if (comboBox5.SelectedIndex == comboBox1.SelectedIndex)
+                                    textBox5.Text = (d1 / 2).ToString("0.0#####E+0");
+                                else
+                                {
+                                    if (comboBox5.SelectedIndex == 0 && comboBox1.SelectedIndex == 1)
+                                        textBox5.Text = (d1 / (2 * 25.4)).ToString("0.0#####E+0");
+                                    if (comboBox5.SelectedIndex == 1 && comboBox1.SelectedIndex == 0)
+                                        textBox5.Text = (d1 * 25.4 / 2).ToString("0.0#####E+0");
+                                }
+                            }
                         }
                         catch
                         {
                         }
 
+                        double usableConductor = 0;
+                        if (d1 > calc4.Depth)
+                            usableConductor = Math.PI * Math.Pow(d1 / 2, 2) - Math.PI * Math.Pow(d1 / 2 - calc4.Depth, 2);
+                        else
+                            usableConductor = Math.PI * Math.Pow(d1 / 2, 2);
+                        double Percent = usableConductor / (Math.PI * Math.Pow(d1 / 2, 2)) * 100;
+
                         Bitmap btm4 = new Bitmap(pictureBoxImage.Width, pictureBoxImage.Height);
                         Graphics g4 = Graphics.FromImage(btm4);
 
-                        g4.FillRectangle(Brushes.White, 0, 0, pictureBoxImage.Width, pictureBoxImage.Height);
+                        int Width = pictureBoxImage.Width;
+                        int Height = pictureBoxImage.Height;
+
+                        PointF pointTopMiddle = new PointF((Width / 2 - 50), (Height / 2 - colors.Max(v => v.W)));
+                        PointF pointTopRight = new PointF((Width / 2 - 50) + colors.Max(v => v.W) + 20, (Height / 2 - colors.Max(v => v.W)));
+
+                        PointF pointBottomMiddle = new PointF((Width / 2 - 50), (Height / 2 + colors.Max(v => v.W)));
+                        PointF pointBottomRight = new PointF((Width / 2 - 50) + colors.Max(v => v.W) + 20, (Height / 2 + colors.Max(v => v.W)));
+
+                        PointF pointTopMiddleDepth = new PointF((Width / 2 - 50), (Height / 2 - colors.Max(v => v.W)) + DepthInPixels);
+                        PointF pointTopRightDepth = new PointF((Width / 2 - 50) + colors.Max(v => v.W) + 10, (Height / 2 - colors.Max(v => v.W)) + DepthInPixels);
+
+                        PointF pointBottomMiddleDepth = new PointF((Width / 2 - 50), (Height / 2 + colors.Max(v => v.W)) - DepthInPixels);
+                        PointF pointBottomRightDepth = new PointF((Width / 2 - 50) + colors.Max(v => v.W) + 10, (Height / 2 + colors.Max(v => v.W)) - DepthInPixels);
+                        //- Graphcalc3.Max(v => v.X)
+
+                        g4.FillRectangle(Brushes.White, 0, 0, Width, Height);
 
                         foreach (Vector4 calc in colors)
                         {
-                            double r = calc.W * pictureBoxImage.Width / d1 / 3;
-                            g4.DrawEllipse(new Pen(Color.FromArgb((int)calc.X, (int)calc.Y, (int)calc.Z)), (float)(150 - calc.W), (float)(120 - calc.W), (float)calc.W * 2, (float)calc.W * 2);
+                            g4.DrawEllipse(new Pen(Color.FromArgb((int)calc.X, (int)calc.Y, (int)calc.Z)), (float)((Width / 2 - 50) - calc.W), (float)(Height / 2 - calc.W), (float)calc.W * 2, (float)calc.W * 2);
+                        }
+                        g4.DrawLine(Pens.Black, pointTopMiddle, pointTopRight);
+                        g4.DrawLine(Pens.Black, pointBottomMiddle, pointBottomRight);
+                        g4.DrawLine(pen1Black, pointTopRight, pointBottomRight);
+
+                        g4.DrawString(d1.ToString(), new Font("Segoe UI", font), new SolidBrush(Color.Black), pointTopRight.X + 5, Height / 2);
+
+                        if (d1 > calc4.Depth)
+                        {
+                            g4.DrawLine(Pens.Black, pointTopMiddleDepth, pointTopRightDepth);
+                            g4.DrawLine(Pens.Black, pointBottomMiddleDepth, pointBottomRightDepth);
+                            g4.DrawLine(pen1Black, pointTopRight.X - 10, pointTopRight.Y, pointTopRightDepth.X, pointTopRightDepth.Y);
+                            g4.DrawLine(pen1Black, pointBottomRight.X - 10, pointBottomRight.Y, pointBottomRightDepth.X, pointBottomRightDepth.Y);
+
+                            g4.DrawString(calc4.Depth.ToString("0.0#E+0"), new Font("Segoe UI", font), new SolidBrush(Color.Black), pointTopRightDepth.X - 40, (pointTopRight.Y + pointTopRightDepth.Y) / 2);
+                            g4.DrawString(calc4.Depth.ToString("0.0#E+0"), new Font("Segoe UI", font), new SolidBrush(Color.Black), pointBottomRightDepth.X - 40, (pointBottomRight.Y + pointBottomRightDepth.Y) / 2);
+                        }
+
+                        g4.DrawString("Usable area: " + usableConductor + "m\u00b2", new Font("Segoe UI", font), new SolidBrush(Color.Black), 5, Height - 25);
+                        g4.DrawString("% of total conductor area: " + Percent + "%", new Font("Segoe UI", font), new SolidBrush(Color.Black), 5, Height - 15);
+
+                        foreach (Vector4 bar in bars)
+                        {
+                            g4.DrawLine(new Pen(Color.FromArgb((int)bar.X, (int)bar.Y, (int)bar.Z)), pictureBoxImage.Width - 40, bar.W + 40, pictureBoxImage.Width - 30, bar.W + 40);
                         }
 
                         if (valueschanged)
                         {
                             g4.DrawImage(Properties.Resources.ChangedValues, 0, 0, pictureBoxImage.Width, pictureBoxImage.Height);
+                        }
+
+                        try
+                        {
+                            for (int i = 0; i <= Convertedvector4s.Count; i++)
+                            {
+                                LinearGradientBrush linGrBrush = new LinearGradientBrush(
+           new Point(0, 10),
+           new Point(200, 10),
+           Color.FromArgb((int)Convertedvector4s[i].X, (int)Convertedvector4s[i].Y, (int)Convertedvector4s[i].Z),   // Opaque red
+           Color.FromArgb((int)Convertedvector4s[i + 1].X, (int)Convertedvector4s[i + 1].Y, (int)Convertedvector4s[i + 1].Z));  // Opaque blue
+
+                                g4.FillRectangle(linGrBrush, (float)(pictureBoxImage.Width - 40), Convertedvector4s[i].W + 20, 10f, Convertedvector4s[i + 1].W - Convertedvector4s[i].W);
+                            }
+                        }
+                        catch
+                        {
+
                         }
 
                         pictureBoxImage.Image = btm4;
@@ -855,7 +1125,7 @@ namespace Tesla_Coil_Calculator
             {
 
             }
-            
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -867,6 +1137,14 @@ namespace Tesla_Coil_Calculator
                     try
                     {
                         d1 = Convert.ToDouble(textBox1.Text);
+                        if (comboBox1.SelectedIndex == 1)
+                            d1 = d1 * Math.Pow(10, -3);
+                        if (comboBox1.SelectedIndex == 2)
+                            d1 = d1 * Math.Pow(10, -6);
+                        if (comboBox1.SelectedIndex == 3)
+                            d1 = d1 * Math.Pow(10, -9);
+                        if (comboBox1.SelectedIndex == 4)
+                            d1 = d1 * Math.Pow(10, -12);
                         d2 = Convert.ToDouble(textBox2.Text);
                         d3 = Convert.ToDouble(textBox3.Text);
                         d4 = Convert.ToDouble(textBox4.Text);
@@ -877,31 +1155,52 @@ namespace Tesla_Coil_Calculator
                         break;
                     }
 
-                    Array.Clear(Graphcalc3, 0, Graphcalc3.Length);
-                    Array.Clear(Graphcalc4, 0, Graphcalc4.Length);
+                    //Array.Clear(Graphcalc3, 0, Graphcalc3.Length);
+                    //Array.Clear(Graphcalc4, 0, Graphcalc4.Length);
                     Array.Clear(pointFs, 0, pointFs.Length);
+                    colors.Clear();
+                    Graphcalc3.Clear();
+                    Graphcalc4.Clear();
+                    //Array.Clear(colors, 0, colors.Length);
+                    vector4s.Clear();
+                    Convertedvector4s.Clear();
                     int i1 = 0;
 
                     GraphCalc calc1 = new GraphCalc(0, 0, 0, 0, 0);
                     calc1.TimeWindow(d1, d2, d3, d4);
-                    for (double t = 0; t < calc1.T + calc1.T / pictureBoxImage.Width; t = t + calc1.T / pictureBoxImage.Width)
+                    for (double t = 0; t < calc1.T + calc1.T / ((pictureBoxImage.Width - 4) * ccp); t = t + calc1.T / (ccp * (pictureBoxImage.Width - 4)))
                     {
                         calc1.Capacitor_Charging(d1, d2, d3, t);
-                        if (i1 > width)
+                        if (i1 > ccp * (pictureBoxImage.Width - 4))
                             break;
-                        Vector4 vector = new Vector4(i1, pictureBoxImage.Height - (float)calc1.V * pictureBoxImage.Height / (float)d4, (float)calc1.DeltaT, (float)calc1.V);
-                        Graphcalc4[i1] = vector;
+                        Vector4 vector = new Vector4(i1 / ccp + 4, pictureBoxImage.Height - (float)calc1.V * (pictureBoxImage.Height - 4) / (float)d4 - 4, (float)calc1.DeltaT, (float)calc1.V);
+                        Graphcalc4.Add(vector);
 
                         pointFs[i1] = Array.ConvertAll<Vector4, PointF>(new Vector4[] { vector }, v => new PointF(v.X, v.Y))[0];
                         i1++;
                     }
-                    CalcT = Graphcalc4.Max(v => v.Z);
-                    CalcV = Graphcalc4.Max(v => v.W);
+
+                    try
+                    {
+                        CalcT = Graphcalc4.Max(v => v.Z);
+                        CalcV = Graphcalc4.Max(v => v.W);
+                    }
+                    catch
+                    {
+                    }
                     break;
                 case "2":
                     try
                     {
                         d1 = Convert.ToDouble(textBox1.Text);
+                        if (comboBox1.SelectedIndex == 1)
+                            d1 = d1 * Math.Pow(10, -3);
+                        if (comboBox1.SelectedIndex == 2)
+                            d1 = d1 * Math.Pow(10, -6);
+                        if (comboBox1.SelectedIndex == 3)
+                            d1 = d1 * Math.Pow(10, -9);
+                        if (comboBox1.SelectedIndex == 4)
+                            d1 = d1 * Math.Pow(10, -12);
                         d2 = Convert.ToDouble(textBox2.Text);
                         d3 = Convert.ToDouble(textBox3.Text);
                         d4 = Convert.ToDouble(textBox4.Text);
@@ -912,36 +1211,63 @@ namespace Tesla_Coil_Calculator
                         break;
                     }
 
-                    Array.Clear(Graphcalc3, 0, Graphcalc3.Length);
-                    Array.Clear(Graphcalc4, 0, Graphcalc4.Length);
+                    //Array.Clear(Graphcalc3, 0, Graphcalc3.Length);
+                    //Array.Clear(Graphcalc4, 0, Graphcalc4.Length);
                     Array.Clear(pointFs, 0, pointFs.Length);
+                    colors.Clear();
+                    Graphcalc3.Clear();
+                    Graphcalc4.Clear();
+                    //Array.Clear(colors, 0, colors.Length);
+                    vector4s.Clear();
+                    Convertedvector4s.Clear();
                     int i2 = 0;
 
                     GraphCalc calc2 = new GraphCalc(0, 0, 0, 0, 0);
                     calc2.TimeWindow(d1, -d2, d3, d4);
-                    for (double t = 0; t < calc2.T + calc2.T / pictureBoxImage.Width; t = t + calc2.T / pictureBoxImage.Width)
+                    for (double t = 0; t < calc2.T + calc2.T / ((pictureBoxImage.Width - 4) * ccp); t = t + calc2.T / (ccp * (pictureBoxImage.Width - 4)))
                     {
                         calc2.Capacitor_Discharging(d1, d2, d3, t);
-                        if (i2 > width)
+                        if (i2 > ccp * (pictureBoxImage.Width - 4))
                             break;
-                        Vector4 vector = new Vector4(i2, pictureBoxImage.Height - (float)(calc2.V * pictureBoxImage.Height / d3), (float)calc2.DeltaT, (float)calc2.V);
-                        Graphcalc4[i2] = vector;
+                        Vector4 vector = new Vector4(i2 / ccp + 4, pictureBoxImage.Height - (float)(calc2.V * (pictureBoxImage.Height - 4) / d3) - 4, (float)calc2.DeltaT, (float)calc2.V);
+                        Graphcalc4.Add(vector);
 
                         pointFs[i2] = Array.ConvertAll<Vector4, PointF>(new Vector4[] { vector }, v => new PointF(v.X, v.Y))[0];
                         i2++;
                     }
-                    CalcT = Graphcalc4.Max(v => v.Z);
-                    CalcV = Graphcalc4.Max(v => v.W);
+
+                    try
+                    {
+                        CalcT = Graphcalc4.Max(v => v.Z);
+                        CalcV = Graphcalc4.Max(v => v.W);
+                    }
+                    catch
+                    {
+                    }
                     break;
                 case "3":
                     try
                     {
                         d1 = Convert.ToDouble(textBox1.Text);
+                        if (comboBox1.SelectedIndex == 1)
+                            d1 = d1 * Math.Pow(10, -3);
+                        if (comboBox1.SelectedIndex == 2)
+                            d1 = d1 * Math.Pow(10, -6);
+                        if (comboBox1.SelectedIndex == 3)
+                            d1 = d1 * Math.Pow(10, -9);
+                        if (comboBox1.SelectedIndex == 4)
+                            d1 = d1 * Math.Pow(10, -12);
                         d2 = Convert.ToDouble(textBox2.Text);
+                        if (comboBox2.SelectedIndex == 0)
+                            d2 = d2 * Math.Pow(10, -3);
+                        if (comboBox2.SelectedIndex == 2)
+                            d2 = d2 * Math.Pow(10, 3);
+                        if (comboBox2.SelectedIndex == 3)
+                            d2 = d2 * Math.Pow(10, 6);
                         d3 = Convert.ToDouble(textBox3.Text);
                         d4 = Convert.ToDouble(textBox4.Text);
 
-                        if(d4 == 0)
+                        if (d4 == 0)
                         {
                             MessageBox.Show("U2 must be greater than 0.", "Exception: Value aproaches infinity.", MessageBoxButtons.OK);
                             d4 = 0.1;
@@ -954,34 +1280,72 @@ namespace Tesla_Coil_Calculator
                         break;
                     }
 
-                    Array.Clear(Graphcalc3, 0, Graphcalc3.Length);
-                    Array.Clear(Graphcalc4, 0, Graphcalc4.Length);
+                    //Array.Clear(Graphcalc3, 0, Graphcalc3.Length);
+                    //Array.Clear(Graphcalc4, 0, Graphcalc4.Length);
                     Array.Clear(pointFs, 0, pointFs.Length);
+                    colors.Clear();
+                    Graphcalc3.Clear();
+                    Graphcalc4.Clear();
+                    //Array.Clear(colors, 0, colors.Length);
+                    vector4s.Clear();
+                    Convertedvector4s.Clear();
                     int i3 = 0;
 
                     GraphCalc calc3 = new GraphCalc(0, 0, 0, 0, 0);
                     calc3.TimeWindow_RC(d1, d2, d3, d4);
-                    for (double t = 0; t < calc3.T + calc3.T / pictureBoxImage.Width; t = t + calc3.T / pictureBoxImage.Width)
+                    for (double t = 0; t < calc3.T + calc3.T / ((pictureBoxImage.Width - 4) * ccp); t = t + calc3.T / (ccp * (pictureBoxImage.Width - 4)))
                     {
                         calc3.Resistive_Discharging(d1, d2, d3, t);
-                        if (i3 > width)
+                        if (i3 > ccp * (pictureBoxImage.Width - 4))
                             break;
-                        Vector4 vector = new Vector4(i3, pictureBoxImage.Height - (float)(calc3.V * pictureBoxImage.Height / d3), (float)calc3.DeltaT, (float)calc3.V);
-                        Graphcalc4[i3] = vector;
+                        Vector4 vector = new Vector4(i3 / ccp + 4, pictureBoxImage.Height - (float)(calc3.V * (pictureBoxImage.Height - 4) / d3) - 4, (float)calc3.DeltaT, (float)calc3.V);
+                        Graphcalc4.Add(vector);
 
                         pointFs[i3] = Array.ConvertAll<Vector4, PointF>(new Vector4[] { vector }, v => new PointF(v.X, v.Y))[0];
                         i3++;
                     }
-                    CalcT = Graphcalc4.Max(v => v.Z);
-                    CalcV = Graphcalc4.Max(v => v.W);
+
+                    try
+                    {
+                        CalcT = Graphcalc4.Max(v => v.Z);
+                        CalcV = Graphcalc4.Max(v => v.W);
+                    }
+                    catch
+                    {
+                    }
                     break;
                 case "4":
                     try
                     {
                         d1 = Convert.ToDouble(textBox1.Text);
+                        if (comboBox1.SelectedIndex == 0)
+                            d1 = d1 * Math.Pow(10, -3);
+                        if (comboBox1.SelectedIndex == 1)
+                            d1 = d1 * 25.4 * Math.Pow(10, -3);
                         d2 = Convert.ToDouble(textBox2.Text);
+                        if (comboBox2.SelectedIndex == 1)
+                            d2 = d2 * Math.Pow(10, -2);
                         d3 = Convert.ToDouble(textBox3.Text);
                         d4 = Convert.ToDouble(textBox4.Text);
+                        if (comboBox4.SelectedIndex == 1)
+                            d4 = d4 * Math.Pow(10, 3);
+                        if (comboBox4.SelectedIndex == 2)
+                            d4 = d4 * Math.Pow(10, 6);
+                        if (comboBox4.SelectedIndex == 3)
+                            d4 = d4 * Math.Pow(10, 9);
+                        if (comboBox4.SelectedIndex == 4)
+                            d4 = d4 * Math.Pow(10, 12);
+
+                        if (d4 == 0)
+                        {
+                            MessageBox.Show("For this calculation, F must be greater than 0. When F = 0, δ = ∞ (all of the available conductor is used).", "Exception: Value aproaches infinity.", MessageBoxButtons.OK);
+                            d4 = 20;
+                            textBox4.Text = "20";
+                        }
+                        else if (d4 < 20)
+                        {
+                            MessageBox.Show("The calculations used may not be very accurate for low frequencies (F < 20). Use it at your own risk.", "Exception: questionable accuracy.", MessageBoxButtons.OK);
+                        }
                     }
                     catch
                     {
@@ -989,85 +1353,39 @@ namespace Tesla_Coil_Calculator
                         break;
                     }
 
-                    Array.Clear(Graphcalc3, 0, Graphcalc3.Length);
-                    Array.Clear(Graphcalc4, 0, Graphcalc4.Length);
+                    //Array.Clear(Graphcalc3, 0, Graphcalc3.Length);
+                    //Array.Clear(Graphcalc4, 0, Graphcalc4.Length);
                     Array.Clear(pointFs, 0, pointFs.Length);
-                    double r = d1;
+                    colors.Clear();
+                    Graphcalc3.Clear();
+                    Graphcalc4.Clear();
+                    //Array.Clear(colors, 0, colors.Length);
+                    vector4s.Clear();
+                    Convertedvector4s.Clear();
+                    double r = d1 / 2;
                     int i4 = 0;
 
                     GraphCalc calc4 = new GraphCalc(0, 0, 0, 0, 0);
                     calc4.Skin_Depth(d2, d4, d3);
-                    for (double d = 0; d <= r; d += r / 1001)
+                    DepthInPixels = (float)(calc4.Depth * pictureBoxImage.Width / d1 / 1.5);
+                    for (double d = 0; d <= r; d += r / (ccp * pictureBoxImage.Width / 1.5))
                     {
                         calc4.Skin_Effect(d, d4, d3);
-                        if (d > r || i4 > 1000)
+                        if (d > r || i4 > ccp * pictureBoxImage.Width / 1.5)
                             break;
 
-                        double W = (r - d) * pictureBoxImage.Width / d1 / 3;
-                        Vector3 vector = new Vector3((float)W, (float)d, (float)calc4.Resistance);
-                        Graphcalc3[i4] = vector;
+                        Vector3 vector = new Vector3((float)(r - d), (float)d, (float)calc4.Resistance);
+                        Graphcalc3.Add(vector);
 
-                        //pointFs[i4] = Array.ConvertAll<Vector3, PointF>(new Vector3[] { vector }, v => new PointF(v.Y, v.Z))[0];
                         i4++;
                     }
 
-                    //int c = 0;
-                    //foreach (Vector3 vector in Graphcalc3)
-                    //{
-                    //    double value = vector.Z / Graphcalc3[width].Z;
-
-                    //    int rRed = Color.Red.R;
-                    //    int rBlue = Color.Blue.R;
-                    //    int gRed = Color.Red.G;
-                    //    int gBlue = Color.Blue.G;
-                    //    int bRed = Color.Red.B;
-                    //    int bBlue = Color.Blue.B;
-                    //    // Calculate the weighted average of each component
-                    //    int rAverage = (int)Math.Round((1 - value) * rRed + value * rBlue);
-                    //    int gAverage = (int)Math.Round((1 - value) * gRed + value * gBlue);
-                    //    int bAverage = (int)Math.Round((1 - value) * bRed + value * bBlue);
-
-                    //    colors[c] = new Vector4((float)rAverage, (float)gAverage, (float)bAverage, vector.X);
-                    //    c++;
-                    //}
-
-
-                    //Dictionary<double, Color> colorMap = new Dictionary<double, Color>();
-                    //colorMap.Add(0.000001, Color.DarkRed);
-                    //colorMap.Add(0.001, Color.Red);
-                    //colorMap.Add(0.01, Color.Yellow);
-                    //colorMap.Add(0.1, Color.Green);
-                    //colorMap.Add(1, Color.Blue);
-
-                    //// Find the minimum and maximum values of the Z component
-                    //double zMin = Graphcalc3.Min(v => v.Z);
-                    //double zMax = Graphcalc3.Max(v => v.Z);
-
-                    //// Iterate through each element in the Graphcalc3 list and assign the corresponding color
-                    //for (int i = 0; i < width; i++)
-                    //{
-                    //    double zValue = Graphcalc3[i].Z;
-                    //    double t = (zValue - zMin) / (zMax - zMin);
-
-                    //    if (colorMap.Count > 0 && t >= colorMap.Keys.First() && t <= colorMap.Keys.Last())
-                    //    {
-                    //        double t1 = colorMap.Keys.Last(k => k <= t);
-                    //        double t2 = colorMap.Keys.First(k => k >= t);
-                    //        Color color1 = colorMap[t1];
-                    //        Color color2 = colorMap[t2];
-                    //        double tInterp = (t - t1) / (t2 - t1);
-                    //        Color color = InterpolateColor(color1, color2, tInterp);
-                    //        colors[i] = new Vector4(color.R, color.G, color.B, Graphcalc3[i].X);
-                    //    }
-                    //}
-
-
-                    for (int i = 0; i < 1000 + 1; i++)
+                    for (int i = 0; i < Graphcalc3.Count; i++)
                     {
-                        if (Graphcalc3[i].Z <= 1.678 * Math.Pow(10, -8))
+                        if (Graphcalc3[i].Z <= d2)
                         {
                             double zMin = Graphcalc3.Min(v => v.Z);
-                            double zMax = 1.678 * Math.Pow(10, -8);
+                            double zMax = d2;
 
                             double zvalue = Graphcalc3[i].Z;
                             double value = (zvalue - zMin) / (zMax - zMin);
@@ -1082,12 +1400,14 @@ namespace Tesla_Coil_Calculator
                             int rAverage = (int)Math.Round((1 - value) * rRed + value * rBlue);
                             int gAverage = (int)Math.Round((1 - value) * gRed + value * gBlue);
                             int bAverage = (int)Math.Round((1 - value) * bRed + value * bBlue);
-                            colors[i] = new Vector4(rAverage, gAverage, bAverage, Graphcalc3[i].X);
+
+                            double W = Graphcalc3[i].X * pictureBoxImage.Width / d1 / 1.5;
+                            colors.Add(new Vector4(rAverage, gAverage, bAverage, (float)W));
                         }
-                        if (Graphcalc3[i].Z > 1.678 * Math.Pow(10, -8) && Graphcalc3[i].Z <= 1.678 * Math.Pow(10, -5))
+                        if (Graphcalc3[i].Z > d2 && Graphcalc3[i].Z <= d2 * 50)
                         {
-                            double zMin = 1.678 * Math.Pow(10, -8);
-                            double zMax = 1.678 * Math.Pow(10, -5);
+                            double zMin = d2;
+                            double zMax = d2 * 50;
 
                             double zvalue = Graphcalc3[i].Z;
                             double value = (zvalue - zMin) / (zMax - zMin);
@@ -1102,38 +1422,148 @@ namespace Tesla_Coil_Calculator
                             int rAverage = (int)Math.Round((1 - value) * rRed + value * rBlue);
                             int gAverage = (int)Math.Round((1 - value) * gRed + value * gBlue);
                             int bAverage = (int)Math.Round((1 - value) * bRed + value * bBlue);
-                            colors[i] = new Vector4(rAverage, gAverage, bAverage, Graphcalc3[i].X);
+
+                            double W = Graphcalc3[i].X * pictureBoxImage.Width / d1 / 1.5;
+                            colors.Add(new Vector4(rAverage, gAverage, bAverage, (float)W));
                         }
-                        if(Graphcalc3[i].Z > 1.678 * Math.Pow(10, -5))
+                        if (Graphcalc3[i].Z > d2 * 50)
                         {
-                            double zMin = 1.678 * Math.Pow(10, -5);
-                            double zMax = Graphcalc3.Max(v => v.Z);
+                            //double zMin = d2 * 50;
+                            //double zMax = Graphcalc3.Max(v => v.Z);
 
-                            double zvalue = Graphcalc3[i].Z;
-                            double value = (zvalue - zMin) / (zMax - zMin);
+                            //double zvalue = Graphcalc3[i].Z;
+                            //double value = (zvalue - zMin) / (zMax - zMin);
 
-                            int rRed = Color.Blue.R;
-                            int rBlue = Color.DarkBlue.R;
-                            int gRed = Color.Blue.G;
-                            int gBlue = Color.DarkBlue.G;
-                            int bRed = Color.Blue.B;
-                            int bBlue = Color.DarkBlue.B;
-                            // Calculate the weighted average of each component
-                            int rAverage = (int)Math.Round((1 - value) * rRed + value * rBlue);
-                            int gAverage = (int)Math.Round((1 - value) * gRed + value * gBlue);
-                            int bAverage = (int)Math.Round((1 - value) * bRed + value * bBlue);
-                            colors[i] = new Vector4(rAverage, gAverage, bAverage, Graphcalc3[i].X);
+                            //int rRed = Color.Blue.R;
+                            //int rBlue = Color.DarkBlue.R;
+                            //int gRed = Color.Blue.G;
+                            //int gBlue = Color.DarkBlue.G;
+                            //int bRed = Color.Blue.B;
+                            //int bBlue = Color.DarkBlue.B;
+                            //// Calculate the weighted average of each component
+                            //int rAverage = (int)Math.Round((1 - value) * rRed + value * rBlue);
+                            //int gAverage = (int)Math.Round((1 - value) * gRed + value * gBlue);
+                            //int bAverage = (int)Math.Round((1 - value) * bRed + value * bBlue);
+
+                            int rAverage = 0;
+                            int gAverage = 0;
+                            int bAverage = 255;
+
+                            double W = Graphcalc3[i].X * pictureBoxImage.Width / d1 / 1.5;
+                            colors.Add(new Vector4(rAverage, gAverage, bAverage, (float)W));
                         }
                     }
+
+                    float minZ = 0;
+                    float maxZ = 0;
+                    float minZ2 = 0;
+                    float maxZ2 = 0;
+                    float minZ3 = 0;
+                    float maxZ3 = 0;
+
+                    try
+                    {
+                        minZ = colors.Where(c => c.X == 255).Min(c => c.W);
+                        maxZ = colors.Where(c => c.X == 255).Max(c => c.W);
+
+                        minZ2 = colors.Where(c => c.Y == 128).Min(c => c.W); //This is what's causing trouble
+                        maxZ2 = colors.Where(c => c.Y == 128).Max(c => c.W); //This is what's causing trouble
+
+                        minZ3 = colors.Where(c => c.Z == 255).Min(c => c.W);
+                        maxZ3 = colors.Where(c => c.Z == 255).Max(c => c.W);
+                    }
+                    catch
+                    {
+
+                    }
+
+                    int jwhdjwd = 0;
+
+                    foreach (Vector4 color in colors)
+                    {
+                        if ((color.W <= minZ && color.W >= maxZ2) || (color.W <= minZ2 && color.W >= maxZ3))
+                        {
+                            Vector4 newVector4 = new Vector4(color.X, color.Y, color.Z, jwhdjwd);
+                            vector4s.Add(newVector4);
+                            jwhdjwd++;
+                        }
+                    }
+
+                    for (int i = 0; i < vector4s.Count; i++)
+                    {
+                        float converted = vector4s[i].W * 200 / vector4s.Max(v => v.W);
+
+                        Vector4 newConvertedvector4s = new Vector4(vector4s[i].X, vector4s[i].Y, vector4s[i].Z, converted);
+                        Convertedvector4s.Add(newConvertedvector4s);
+                    }
+
                     break;
             }
         }
-        private Color InterpolateColor(Color color1, Color color2, double t)
+
+        private void pictureBoxImage_MouseMove(object sender, MouseEventArgs e)
         {
-            int r = (int)((1 - t) * color1.R + t * color2.R);
-            int g = (int)((1 - t) * color1.G + t * color2.G);
-            int b = (int)((1 - t) * color1.B + t * color2.B);
-            return Color.FromArgb(r, g, b);
+            mouseX = e.X;
+            mouseY = e.Y;
+        }
+
+        private void pictureBoxImage_MouseLeave(object sender, EventArgs e)
+        {
+            MouseisInside = false;
+        }
+
+        private void pictureBoxImage_MouseEnter(object sender, EventArgs e)
+        {
+            MouseisInside = true;
+        }
+
+        private void pictureBoxClose_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void pictureBoxSettings_Click(object sender, EventArgs e)
+        {
+            settings = new Settings(notifyDelegate, font, ccp);
+            settings.Show();
+        }
+
+        public void ChangeValues()
+        {
+            font = settings.FONT;
+            ccp = settings.CCP;
+
+            pointFs = new PointF[ccp * (pictureBoxImage.Width - 4) + 1];
+        }
+
+        private void comboBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void comboBox2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void comboBox3_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void comboBox4_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void comboBox5_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void comboBox6_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
         }
     }
 }

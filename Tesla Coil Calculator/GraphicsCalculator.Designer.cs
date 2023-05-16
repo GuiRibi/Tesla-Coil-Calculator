@@ -83,7 +83,7 @@ namespace Tesla_Coil_Calculator
             radioButton2 = new RadioButton();
             radioButton4 = new RadioButton();
             radioButton1 = new RadioButton();
-            pictureBox1 = new PictureBox();
+            pictureBoxSettings = new PictureBox();
             timerCalc = new System.Windows.Forms.Timer(components);
             toolTip1 = new ToolTip(components);
             toolTip2 = new ToolTip(components);
@@ -112,7 +112,7 @@ namespace Tesla_Coil_Calculator
             tableLayoutPanel10.SuspendLayout();
             tableLayoutPanel11.SuspendLayout();
             panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxSettings).BeginInit();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -157,6 +157,7 @@ namespace Tesla_Coil_Calculator
             pictureBoxClose.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBoxClose.TabIndex = 0;
             pictureBoxClose.TabStop = false;
+            pictureBoxClose.Click += pictureBoxClose_Click;
             // 
             // pictureBoxMinimize
             // 
@@ -351,6 +352,9 @@ namespace Tesla_Coil_Calculator
             pictureBoxImage.TabIndex = 6;
             pictureBoxImage.TabStop = false;
             pictureBoxImage.Tag = "0";
+            pictureBoxImage.MouseEnter += pictureBoxImage_MouseEnter;
+            pictureBoxImage.MouseLeave += pictureBoxImage_MouseLeave;
+            pictureBoxImage.MouseMove += pictureBoxImage_MouseMove;
             // 
             // tableLayoutPanel7
             // 
@@ -359,7 +363,7 @@ namespace Tesla_Coil_Calculator
             tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 622F));
             tableLayoutPanel7.Controls.Add(labelTitle, 1, 1);
             tableLayoutPanel7.Controls.Add(tableLayoutPanel8, 1, 2);
-            tableLayoutPanel7.Controls.Add(pictureBox1, 0, 0);
+            tableLayoutPanel7.Controls.Add(pictureBoxSettings, 0, 0);
             tableLayoutPanel7.Dock = DockStyle.Fill;
             tableLayoutPanel7.Location = new Point(155, 30);
             tableLayoutPanel7.Name = "tableLayoutPanel7";
@@ -531,6 +535,7 @@ namespace Tesla_Coil_Calculator
             comboBox3.Size = new Size(55, 23);
             comboBox3.TabIndex = 7;
             comboBox3.Visible = false;
+            comboBox3.KeyPress += comboBox3_KeyPress;
             // 
             // comboBox2
             // 
@@ -540,6 +545,7 @@ namespace Tesla_Coil_Calculator
             comboBox2.Size = new Size(55, 23);
             comboBox2.TabIndex = 6;
             comboBox2.Visible = false;
+            comboBox2.KeyPress += comboBox2_KeyPress;
             // 
             // textBox1
             // 
@@ -674,6 +680,7 @@ namespace Tesla_Coil_Calculator
             comboBox4.Size = new Size(55, 23);
             comboBox4.TabIndex = 2;
             comboBox4.Visible = false;
+            comboBox4.KeyPress += comboBox4_KeyPress;
             // 
             // comboBox1
             // 
@@ -683,6 +690,7 @@ namespace Tesla_Coil_Calculator
             comboBox1.Size = new Size(55, 23);
             comboBox1.TabIndex = 8;
             comboBox1.Visible = false;
+            comboBox1.KeyPress += comboBox1_KeyPress;
             // 
             // textBox5
             // 
@@ -701,6 +709,7 @@ namespace Tesla_Coil_Calculator
             comboBox5.Size = new Size(55, 23);
             comboBox5.TabIndex = 14;
             comboBox5.Visible = false;
+            comboBox5.KeyPress += comboBox5_KeyPress;
             // 
             // textBox6
             // 
@@ -719,6 +728,7 @@ namespace Tesla_Coil_Calculator
             comboBox6.Size = new Size(55, 23);
             comboBox6.TabIndex = 17;
             comboBox6.Visible = false;
+            comboBox6.KeyPress += comboBox6_KeyPress;
             // 
             // panel1
             // 
@@ -800,17 +810,18 @@ namespace Tesla_Coil_Calculator
             radioButton1.UseVisualStyleBackColor = true;
             radioButton1.Visible = false;
             // 
-            // pictureBox1
+            // pictureBoxSettings
             // 
-            pictureBox1.Cursor = Cursors.Hand;
-            pictureBox1.Dock = DockStyle.Fill;
-            pictureBox1.Image = Properties.Resources.Gear1;
-            pictureBox1.Location = new Point(3, 3);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(17, 15);
-            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox1.TabIndex = 2;
-            pictureBox1.TabStop = false;
+            pictureBoxSettings.Cursor = Cursors.Hand;
+            pictureBoxSettings.Dock = DockStyle.Fill;
+            pictureBoxSettings.Image = Properties.Resources.Gear1;
+            pictureBoxSettings.Location = new Point(3, 3);
+            pictureBoxSettings.Name = "pictureBoxSettings";
+            pictureBoxSettings.Size = new Size(17, 15);
+            pictureBoxSettings.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBoxSettings.TabIndex = 2;
+            pictureBoxSettings.TabStop = false;
+            pictureBoxSettings.Click += pictureBoxSettings_Click;
             // 
             // timerCalc
             // 
@@ -859,7 +870,7 @@ namespace Tesla_Coil_Calculator
             tableLayoutPanel11.PerformLayout();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBoxSettings).EndInit();
             ResumeLayout(false);
         }
 
@@ -923,7 +934,7 @@ namespace Tesla_Coil_Calculator
         private ToolTip toolTip8_1;
         private ToolTip toolTip8_2;
         private ToolTip toolTip9;
-        private PictureBox pictureBox1;
+        private PictureBox pictureBoxSettings;
         private ToolTip toolTip10;
         private TableLayoutPanel tableLayoutPanel6;
         private Label labelSkinEffect;

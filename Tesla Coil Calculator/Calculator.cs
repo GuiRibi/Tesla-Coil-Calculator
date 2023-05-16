@@ -10,6 +10,19 @@ namespace Tesla_Coil_Calculator
 {
     public partial class Calculator : Form
     {
+        private const int CS_DROPSHADOW = 0x00020000;
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                // add the drop shadow flag for automatically drawing
+                // a drop shadow around the form
+                CreateParams cp = base.CreateParams;
+                cp.ClassStyle |= CS_DROPSHADOW;
+                return cp;
+            }
+        }
+
         string[] Inductance = { "H", "mH", "µH", "nH", "pH" };
         string[] Capacitance = { "F", "mF", "µF", "nF", "pF" };
         string[] Frequency = { "Hz", "KHz", "MHz", "GHz" };
