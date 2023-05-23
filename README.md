@@ -8,7 +8,7 @@ This Calculator was built to help anyone design and make their own tesla coil. T
 
 Select an option from the tab on the left.>> Click on the Radiobutton with the variable you want to calculate.>> Fill in the other variables. >>If applicable, select the unit you want to use from the ComboBox.
 
-# Download & installation
+# Download & intallation
 Download and extract [this Zip file](https://github.com/GuiRibi/Tesla-Coil-Calculator/blob/1.1.0/Tesla%20Coil%20Calculator.zip) and run ***Tesla Coil Calculator.exe***
 
 # Change Log
