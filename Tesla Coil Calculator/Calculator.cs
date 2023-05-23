@@ -1,13 +1,26 @@
 ﻿using Microsoft.VisualBasic;
+using System.Drawing.Drawing2D;
 using System.Linq.Expressions;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Tesla_Coil_Calculator
 {
-    public partial class Form1 : Form
+    public partial class Calculator : Form
     {
+        private const int CS_DROPSHADOW = 0x00020000;
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams cp = base.CreateParams;
+                cp.ClassStyle |= CS_DROPSHADOW;
+                return cp;
+            }
+        }
+
         string[] Inductance = { "H", "mH", "µH", "nH", "pH" };
         string[] Capacitance = { "F", "mF", "µF", "nF", "pF" };
         string[] Frequency = { "Hz", "KHz", "MHz", "GHz" };
@@ -33,7 +46,12 @@ namespace Tesla_Coil_Calculator
         double d5;
         double d6;
 
-        public Form1()
+        int width;
+
+        Vector4[] Graphcalc;
+        PointF[] pointFs;
+
+        public Calculator()
         {
             InitializeComponent();
         }
@@ -49,7 +67,9 @@ namespace Tesla_Coil_Calculator
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            width = pictureBoxImage.Width;
+            Graphcalc = new Vector4[width + 1];
+            pointFs = new PointF[width + 1];
         }
 
         private void labelHelical_MouseEnter(object sender, EventArgs e)
@@ -161,6 +181,24 @@ namespace Tesla_Coil_Calculator
             if ((string)pictureBoxImage.Tag != "10")
                 labelPowerDissipation.Font = Normal;
         }
+
+        private void labelGraphicalCalculator_MouseEnter(object sender, EventArgs e)
+        {
+            labelGraphicalCalculator.Font = Bold;
+        }
+
+        private void labelGraphicalCalculator_MouseLeave(object sender, EventArgs e)
+        {
+            if ((string)pictureBoxImage.Tag != "11")
+                labelGraphicalCalculator.Font = Normal;
+        }
+
+        private void labelGraphicalCalculator_Click(object sender, EventArgs e)
+        {
+            GraphicsCalculator calculator = new GraphicsCalculator();
+            calculator.Show();
+        }
+
 
         private void labelHelical_Click(object sender, EventArgs e)
         {
