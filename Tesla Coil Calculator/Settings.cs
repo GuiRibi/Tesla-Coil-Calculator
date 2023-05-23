@@ -19,8 +19,6 @@ namespace Tesla_Coil_Calculator
         {
             get
             {
-                // add the drop shadow flag for automatically drawing
-                // a drop shadow around the form
                 CreateParams cp = base.CreateParams;
                 cp.ClassStyle |= CS_DROPSHADOW;
                 return cp;

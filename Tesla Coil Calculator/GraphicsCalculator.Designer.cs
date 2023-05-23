@@ -89,13 +89,6 @@ namespace Tesla_Coil_Calculator
             toolTip2 = new ToolTip(components);
             toolTip3 = new ToolTip(components);
             toolTip4 = new ToolTip(components);
-            toolTip5 = new ToolTip(components);
-            toolTip6 = new ToolTip(components);
-            toolTip7 = new ToolTip(components);
-            toolTip8_1 = new ToolTip(components);
-            toolTip8_2 = new ToolTip(components);
-            toolTip9 = new ToolTip(components);
-            toolTip10 = new ToolTip(components);
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBoxIcon).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBoxClose).BeginInit();
@@ -192,13 +185,13 @@ namespace Tesla_Coil_Calculator
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel2.Size = new Size(155, 420);
+            tableLayoutPanel2.Size = new Size(160, 420);
             tableLayoutPanel2.TabIndex = 1;
             // 
             // tableLayoutPanel5
             // 
             tableLayoutPanel5.ColumnCount = 2;
-            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 15F));
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 8F));
             tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel5.Controls.Add(labelResistiveDischarging, 1, 2);
             tableLayoutPanel5.Controls.Add(labelCCDischarging, 1, 1);
@@ -210,7 +203,7 @@ namespace Tesla_Coil_Calculator
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel5.Size = new Size(149, 91);
+            tableLayoutPanel5.Size = new Size(154, 91);
             tableLayoutPanel5.TabIndex = 9;
             // 
             // labelResistiveDischarging
@@ -218,7 +211,7 @@ namespace Tesla_Coil_Calculator
             labelResistiveDischarging.AutoSize = true;
             labelResistiveDischarging.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             labelResistiveDischarging.ForeColor = Color.White;
-            labelResistiveDischarging.Location = new Point(18, 44);
+            labelResistiveDischarging.Location = new Point(11, 44);
             labelResistiveDischarging.Name = "labelResistiveDischarging";
             labelResistiveDischarging.Size = new Size(105, 42);
             labelResistiveDischarging.TabIndex = 7;
@@ -232,7 +225,7 @@ namespace Tesla_Coil_Calculator
             labelCCDischarging.AutoSize = true;
             labelCCDischarging.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             labelCCDischarging.ForeColor = Color.White;
-            labelCCDischarging.Location = new Point(18, 22);
+            labelCCDischarging.Location = new Point(11, 22);
             labelCCDischarging.Name = "labelCCDischarging";
             labelCCDischarging.Size = new Size(128, 21);
             labelCCDischarging.TabIndex = 8;
@@ -246,7 +239,7 @@ namespace Tesla_Coil_Calculator
             labelCCCharging.AutoSize = true;
             labelCCCharging.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             labelCCCharging.ForeColor = Color.White;
-            labelCCCharging.Location = new Point(18, 0);
+            labelCCCharging.Location = new Point(11, 0);
             labelCCCharging.Name = "labelCCCharging";
             labelCCCharging.Size = new Size(109, 21);
             labelCCCharging.TabIndex = 2;
@@ -280,7 +273,7 @@ namespace Tesla_Coil_Calculator
             // tableLayoutPanel6
             // 
             tableLayoutPanel6.ColumnCount = 2;
-            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 15F));
+            tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 8F));
             tableLayoutPanel6.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel6.Controls.Add(labelSkinEffect, 1, 0);
             tableLayoutPanel6.Dock = DockStyle.Fill;
@@ -291,7 +284,7 @@ namespace Tesla_Coil_Calculator
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel6.Size = new Size(149, 237);
+            tableLayoutPanel6.Size = new Size(154, 237);
             tableLayoutPanel6.TabIndex = 11;
             // 
             // labelSkinEffect
@@ -299,7 +292,7 @@ namespace Tesla_Coil_Calculator
             labelSkinEffect.AutoSize = true;
             labelSkinEffect.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             labelSkinEffect.ForeColor = Color.White;
-            labelSkinEffect.Location = new Point(18, 0);
+            labelSkinEffect.Location = new Point(11, 0);
             labelSkinEffect.Name = "labelSkinEffect";
             labelSkinEffect.Size = new Size(93, 21);
             labelSkinEffect.TabIndex = 4;
@@ -347,7 +340,7 @@ namespace Tesla_Coil_Calculator
             pictureBoxImage.Dock = DockStyle.Fill;
             pictureBoxImage.Location = new Point(3, 3);
             pictureBoxImage.Name = "pictureBoxImage";
-            pictureBoxImage.Size = new Size(328, 267);
+            pictureBoxImage.Size = new Size(325, 267);
             pictureBoxImage.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBoxImage.TabIndex = 6;
             pictureBoxImage.TabStop = false;
@@ -360,18 +353,18 @@ namespace Tesla_Coil_Calculator
             // 
             tableLayoutPanel7.ColumnCount = 2;
             tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 31.16279F));
-            tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 622F));
+            tableLayoutPanel7.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 617F));
             tableLayoutPanel7.Controls.Add(labelTitle, 1, 1);
             tableLayoutPanel7.Controls.Add(tableLayoutPanel8, 1, 2);
             tableLayoutPanel7.Controls.Add(pictureBoxSettings, 0, 0);
             tableLayoutPanel7.Dock = DockStyle.Fill;
-            tableLayoutPanel7.Location = new Point(155, 30);
+            tableLayoutPanel7.Location = new Point(160, 30);
             tableLayoutPanel7.Name = "tableLayoutPanel7";
             tableLayoutPanel7.RowCount = 3;
             tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Absolute, 24F));
             tableLayoutPanel7.RowStyles.Add(new RowStyle(SizeType.Absolute, 375F));
-            tableLayoutPanel7.Size = new Size(645, 420);
+            tableLayoutPanel7.Size = new Size(640, 420);
             tableLayoutPanel7.TabIndex = 2;
             // 
             // labelTitle
@@ -399,7 +392,7 @@ namespace Tesla_Coil_Calculator
             tableLayoutPanel8.Name = "tableLayoutPanel8";
             tableLayoutPanel8.RowCount = 1;
             tableLayoutPanel8.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel8.Size = new Size(616, 369);
+            tableLayoutPanel8.Size = new Size(611, 369);
             tableLayoutPanel8.TabIndex = 0;
             // 
             // tableLayoutPanel9
@@ -409,12 +402,12 @@ namespace Tesla_Coil_Calculator
             tableLayoutPanel9.Controls.Add(pictureBoxImage, 0, 0);
             tableLayoutPanel9.Controls.Add(panel2, 0, 1);
             tableLayoutPanel9.Dock = DockStyle.Fill;
-            tableLayoutPanel9.Location = new Point(258, 3);
+            tableLayoutPanel9.Location = new Point(256, 3);
             tableLayoutPanel9.Name = "tableLayoutPanel9";
             tableLayoutPanel9.RowCount = 2;
             tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 75.27174F));
             tableLayoutPanel9.RowStyles.Add(new RowStyle(SizeType.Percent, 24.72826F));
-            tableLayoutPanel9.Size = new Size(334, 363);
+            tableLayoutPanel9.Size = new Size(331, 363);
             tableLayoutPanel9.TabIndex = 7;
             // 
             // panel2
@@ -423,7 +416,7 @@ namespace Tesla_Coil_Calculator
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(3, 276);
             panel2.Name = "panel2";
-            panel2.Size = new Size(328, 84);
+            panel2.Size = new Size(325, 84);
             panel2.TabIndex = 7;
             // 
             // button1
@@ -458,7 +451,7 @@ namespace Tesla_Coil_Calculator
             tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel10.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel10.Size = new Size(249, 363);
+            tableLayoutPanel10.Size = new Size(247, 363);
             tableLayoutPanel10.TabIndex = 8;
             // 
             // tableLayoutPanel11
@@ -510,7 +503,6 @@ namespace Tesla_Coil_Calculator
             label6.TabIndex = 18;
             label6.Text = "X";
             label6.TextAlign = ContentAlignment.MiddleCenter;
-            toolTip3.SetToolTip(label6, "Coil's angle");
             label6.Visible = false;
             // 
             // label5
@@ -524,7 +516,10 @@ namespace Tesla_Coil_Calculator
             label5.TabIndex = 15;
             label5.Text = "W";
             label5.TextAlign = ContentAlignment.MiddleCenter;
-            toolTip3.SetToolTip(label5, "Coil's width");
+            toolTip1.SetToolTip(label5, "Time it takes to charge the capacitor");
+            toolTip2.SetToolTip(label5, "Time it takes to discharge the capacitor");
+            toolTip4.SetToolTip(label5, "Maximum depth electricity will penetrate");
+            toolTip3.SetToolTip(label5, "Time it takes to discharge the capacitor");
             label5.Visible = false;
             // 
             // comboBox3
@@ -594,17 +589,10 @@ namespace Tesla_Coil_Calculator
             label1.TabIndex = 9;
             label1.Text = "N";
             label1.TextAlign = ContentAlignment.MiddleCenter;
-            toolTip4.SetToolTip(label1, "AC supply voltage");
-            toolTip1.SetToolTip(label1, "Coil's number of turns");
-            toolTip5.SetToolTip(label1, "Capacitor1's capacitance");
-            toolTip9.SetToolTip(label1, "Coil's inductance");
-            toolTip8_1.SetToolTip(label1, "Sphere's radius");
-            toolTip7.SetToolTip(label1, "Power supply voltage");
-            toolTip6.SetToolTip(label1, "AC supply voltage");
-            toolTip3.SetToolTip(label1, "Coil's number of turns");
-            toolTip10.SetToolTip(label1, "Resistor's resistance");
-            toolTip8_2.SetToolTip(label1, "Torus' outer diameter");
-            toolTip2.SetToolTip(label1, "Coil's number of turns");
+            toolTip1.SetToolTip(label1, "Capacitor's capacitance");
+            toolTip2.SetToolTip(label1, "Capacitor's capacitance");
+            toolTip4.SetToolTip(label1, "Wire's diameter");
+            toolTip3.SetToolTip(label1, "Capacitor's capacitance");
             label1.Visible = false;
             // 
             // label2
@@ -618,17 +606,10 @@ namespace Tesla_Coil_Calculator
             label2.TabIndex = 10;
             label2.Text = "H";
             label2.TextAlign = ContentAlignment.MiddleCenter;
-            toolTip4.SetToolTip(label2, "Capacitor max voltage headroom");
-            toolTip1.SetToolTip(label2, "Coil's height");
-            toolTip5.SetToolTip(label2, "Number of capacitors in series");
-            toolTip9.SetToolTip(label2, "Capacitor's capacitance");
-            toolTip8_1.SetToolTip(label2, "Topload's capacitance");
-            toolTip7.SetToolTip(label2, "Power supply's current");
-            toolTip6.SetToolTip(label2, "Resonance frequency");
-            toolTip3.SetToolTip(label2, "Coil's height");
-            toolTip10.SetToolTip(label2, "The current passing through the resistor");
-            toolTip8_2.SetToolTip(label2, "Torus' tube diameter");
-            toolTip2.SetToolTip(label2, "Coil's width");
+            toolTip1.SetToolTip(label2, "Charging current");
+            toolTip2.SetToolTip(label2, "Discharging current");
+            toolTip4.SetToolTip(label2, "Wire's resistance");
+            toolTip3.SetToolTip(label2, "Resistor's resistance");
             label2.Visible = false;
             // 
             // label3
@@ -642,16 +623,10 @@ namespace Tesla_Coil_Calculator
             label3.TabIndex = 11;
             label3.Text = "R";
             label3.TextAlign = ContentAlignment.MiddleCenter;
-            toolTip4.SetToolTip(label3, "Capacitor's max supply voltage");
-            toolTip1.SetToolTip(label3, "Coil's radius");
-            toolTip5.SetToolTip(label3, "Number of capacitors in paralel");
-            toolTip9.SetToolTip(label3, "Resonance frequency");
-            toolTip7.SetToolTip(label3, "Power supply's power");
-            toolTip6.SetToolTip(label3, "Capacitor's minimum dV/dt\r\n(How much the voltage can change in one microsecond)");
-            toolTip3.SetToolTip(label3, "Coil's radius");
-            toolTip10.SetToolTip(label3, "Power dissipated by the resistor");
-            toolTip8_2.SetToolTip(label3, "Topload's capacitance");
-            toolTip2.SetToolTip(label3, "Coil's radius");
+            toolTip1.SetToolTip(label3, "Voltage before charging");
+            toolTip2.SetToolTip(label3, "Voltage before discharging");
+            toolTip4.SetToolTip(label3, "Wire's relative permeability");
+            toolTip3.SetToolTip(label3, "Voltage before discharging");
             label3.Visible = false;
             // 
             // label4
@@ -665,10 +640,10 @@ namespace Tesla_Coil_Calculator
             label4.TabIndex = 12;
             label4.Text = "L";
             label4.TextAlign = ContentAlignment.MiddleCenter;
-            toolTip1.SetToolTip(label4, "Coil's inductance");
-            toolTip5.SetToolTip(label4, "Capacitor bank's total capacitance");
-            toolTip3.SetToolTip(label4, "Coil's inductance");
-            toolTip2.SetToolTip(label4, "Coil's inductance");
+            toolTip1.SetToolTip(label4, "Voltage after charging");
+            toolTip2.SetToolTip(label4, "Voltage after discharging");
+            toolTip4.SetToolTip(label4, "Frequency");
+            toolTip3.SetToolTip(label4, "Voltage after discharging");
             label4.Visible = false;
             // 
             // comboBox4
@@ -829,10 +804,6 @@ namespace Tesla_Coil_Calculator
             timerCalc.Interval = 20;
             timerCalc.Tick += timerCalc_Tick;
             // 
-            // toolTip10
-            // 
-            toolTip10.Active = false;
-            // 
             // GraphicsCalculator
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -928,14 +899,7 @@ namespace Tesla_Coil_Calculator
         private ToolTip toolTip3;
         private ToolTip toolTip2;
         private ToolTip toolTip4;
-        private ToolTip toolTip5;
-        private ToolTip toolTip6;
-        private ToolTip toolTip7;
-        private ToolTip toolTip8_1;
-        private ToolTip toolTip8_2;
-        private ToolTip toolTip9;
         private PictureBox pictureBoxSettings;
-        private ToolTip toolTip10;
         private TableLayoutPanel tableLayoutPanel6;
         private Label labelSkinEffect;
         private Button button1;

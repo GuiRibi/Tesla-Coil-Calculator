@@ -61,7 +61,6 @@ namespace Tesla_Coil_Calculator
 
         public void Skin_Effect(double depth, double f, double Rp)
         {
-            //Resistance = Math.Sqrt(depth * depth * Math.Pow(Math.PI * f * 4 * Math.PI * Math.Pow(10, -7) * Rp, 2));
             double r = depth * Math.Sqrt(Math.PI * f * 4 * Math.PI * Math.Pow(10, -7) * Rp);
             Resistance = r * r;
         }

@@ -51,6 +51,7 @@
             labelTopLoad = new Label();
             labelRF = new Label();
             labelPowerDissipation = new Label();
+            labelGraphicalCalculator = new Label();
             tableLayoutPanel3 = new TableLayoutPanel();
             label10 = new Label();
             label11 = new Label();
@@ -90,7 +91,6 @@
             radioButton4 = new RadioButton();
             radioButton1 = new RadioButton();
             pictureBox1 = new PictureBox();
-            button1 = new Button();
             timerCalc = new System.Windows.Forms.Timer(components);
             toolTip1 = new ToolTip(components);
             toolTip2 = new ToolTip(components);
@@ -203,7 +203,7 @@
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 27F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 78F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 26F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 144F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 166F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel2.Size = new Size(155, 420);
             tableLayoutPanel2.TabIndex = 1;
@@ -370,15 +370,17 @@
             tableLayoutPanel6.Controls.Add(labelTopLoad, 1, 1);
             tableLayoutPanel6.Controls.Add(labelRF, 1, 2);
             tableLayoutPanel6.Controls.Add(labelPowerDissipation, 1, 3);
+            tableLayoutPanel6.Controls.Add(labelGraphicalCalculator, 1, 4);
             tableLayoutPanel6.Dock = DockStyle.Fill;
             tableLayoutPanel6.Location = new Point(3, 249);
             tableLayoutPanel6.Name = "tableLayoutPanel6";
-            tableLayoutPanel6.RowCount = 4;
+            tableLayoutPanel6.RowCount = 5;
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 22F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
             tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel6.Size = new Size(149, 138);
+            tableLayoutPanel6.RowStyles.Add(new RowStyle(SizeType.Absolute, 27F));
+            tableLayoutPanel6.Size = new Size(149, 160);
             tableLayoutPanel6.TabIndex = 11;
             // 
             // labelPowerSupply
@@ -437,6 +439,20 @@
             labelPowerDissipation.MouseEnter += labelPowerDissipation_MouseEnter;
             labelPowerDissipation.MouseLeave += labelPowerDissipation_MouseLeave;
             // 
+            // labelGraphicalCalculator
+            // 
+            labelGraphicalCalculator.AutoSize = true;
+            labelGraphicalCalculator.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            labelGraphicalCalculator.ForeColor = Color.White;
+            labelGraphicalCalculator.Location = new Point(18, 133);
+            labelGraphicalCalculator.Name = "labelGraphicalCalculator";
+            labelGraphicalCalculator.Size = new Size(82, 21);
+            labelGraphicalCalculator.TabIndex = 8;
+            labelGraphicalCalculator.Text = ">Graphics";
+            labelGraphicalCalculator.Click += labelGraphicalCalculator_Click;
+            labelGraphicalCalculator.MouseEnter += labelGraphicalCalculator_MouseEnter;
+            labelGraphicalCalculator.MouseLeave += labelGraphicalCalculator_MouseLeave;
+            // 
             // tableLayoutPanel3
             // 
             tableLayoutPanel3.ColumnCount = 2;
@@ -481,8 +497,6 @@
             pictureBoxImage.TabIndex = 6;
             pictureBoxImage.TabStop = false;
             pictureBoxImage.Tag = "0";
-            pictureBoxImage.MouseLeave += pictureBoxImage_MouseLeave;
-            pictureBoxImage.MouseMove += pictureBoxImage_MouseMove;
             // 
             // tableLayoutPanel7
             // 
@@ -492,7 +506,6 @@
             tableLayoutPanel7.Controls.Add(labelTitle, 1, 1);
             tableLayoutPanel7.Controls.Add(tableLayoutPanel8, 1, 2);
             tableLayoutPanel7.Controls.Add(pictureBox1, 0, 0);
-            tableLayoutPanel7.Controls.Add(button1, 1, 0);
             tableLayoutPanel7.Dock = DockStyle.Fill;
             tableLayoutPanel7.Location = new Point(155, 30);
             tableLayoutPanel7.Name = "tableLayoutPanel7";
@@ -967,16 +980,6 @@
             pictureBox1.TabStop = false;
             pictureBox1.Click += pictureBox1_Click;
             // 
-            // button1
-            // 
-            button1.Location = new Point(26, 3);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 15);
-            button1.TabIndex = 3;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
-            // 
             // timerCalc
             // 
             timerCalc.Enabled = true;
@@ -1107,6 +1110,6 @@
         private Label labelPowerDissipation;
         private PictureBox pictureBox1;
         private ToolTip toolTip10;
-        private Button button1;
+        private Label labelGraphicalCalculator;
     }
 }

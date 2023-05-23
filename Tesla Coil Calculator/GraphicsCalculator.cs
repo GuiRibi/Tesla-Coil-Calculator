@@ -26,8 +26,6 @@ namespace Tesla_Coil_Calculator
         {
             get
             {
-                // add the drop shadow flag for automatically drawing
-                // a drop shadow around the form
                 CreateParams cp = base.CreateParams;
                 cp.ClassStyle |= CS_DROPSHADOW;
                 return cp;
@@ -73,13 +71,8 @@ namespace Tesla_Coil_Calculator
         int mouseX;
         int mouseY;
 
-        //Vector3[] Graphcalc3;
-        //Vector4[] Graphcalc4;
         PointF[] pointFs;
-        //Vector4[] colors;
-        //Vector4[] bars;
 
-        //List<PointF> pointFs = new List<PointF>();
         List<Vector3> Graphcalc3 = new List<Vector3>();
         List<Vector4> Graphcalc4 = new List<Vector4>();
         List<Vector4> colors = new List<Vector4>();
@@ -99,11 +92,7 @@ namespace Tesla_Coil_Calculator
         private void GraphicsCalculator_Load(object sender, EventArgs e)
         {
             width = pictureBoxImage.Width;
-            //Graphcalc3 = new Vector3[(int)(ccp * pictureBoxImage.Width / 1.5) + 1];
-            //Graphcalc4 = new Vector4[ccp * pictureBoxImage.Width + 1];
             pointFs = new PointF[ccp * (pictureBoxImage.Width - 4) + 1];
-            //colors = new Vector4[(int)(ccp * pictureBoxImage.Width / 1.5) + 1];
-            //bars = new Vector4[(int)(ccp * pictureBoxImage.Width / 1.5) + 1];
         }
 
         private void tableLayoutPanel1_MouseDown(object sender, MouseEventArgs e)
@@ -242,6 +231,24 @@ namespace Tesla_Coil_Calculator
             label3.Text = "U1";
             label4.Text = "U2";
             label5.Text = "T";
+
+            //Tooltip
+            toolTip1.Active = true;
+            toolTip2.Active = false;
+            toolTip3.Active = false;
+            toolTip4.Active = false;
+
+            //pictureBox
+            pictureBoxImage.Image = null;
+
+            //Lists
+            Array.Clear(pointFs);
+            Graphcalc4.Clear();
+            Graphcalc3.Clear();
+            vector4s.Clear();
+            Convertedvector4s.Clear();
+            colors.Clear();
+            bars.Clear();
         }
 
         private void labelCCDischarging_Click(object sender, EventArgs e)
@@ -295,9 +302,7 @@ namespace Tesla_Coil_Calculator
             comboBox4.Text = "V";
             comboBox5.Text = "s";
 
-            comboBox2.SelectedIndex = 0;
-            comboBox3.SelectedIndex = 0;
-            comboBox4.SelectedIndex = 0;
+            comboBox1.SelectedIndex = 0;
 
             //Radiobutton
             radioButton1.Visible = false;
@@ -329,6 +334,24 @@ namespace Tesla_Coil_Calculator
             label3.Text = "U1";
             label4.Text = "U2";
             label5.Text = "T";
+
+            //Tooltip
+            toolTip1.Active = false;
+            toolTip2.Active = true;
+            toolTip3.Active = false;
+            toolTip4.Active = false;
+
+            //pictureBox
+            pictureBoxImage.Image = null;
+
+            //Lists
+            Array.Clear(pointFs);
+            Graphcalc4.Clear();
+            Graphcalc3.Clear();
+            vector4s.Clear();
+            Convertedvector4s.Clear();
+            colors.Clear();
+            bars.Clear();
         }
 
         private void labelResistiveDischarging_Click(object sender, EventArgs e)
@@ -415,6 +438,24 @@ namespace Tesla_Coil_Calculator
             label3.Text = "U1";
             label4.Text = "U2";
             label5.Text = "T";
+
+            //Tooltip
+            toolTip1.Active = false;
+            toolTip2.Active = false;
+            toolTip3.Active = true;
+            toolTip4.Active = false;
+
+            //pictureBox
+            pictureBoxImage.Image = null;
+
+            //Lists
+            Array.Clear(pointFs);
+            Graphcalc4.Clear();
+            Graphcalc3.Clear();
+            vector4s.Clear();
+            Convertedvector4s.Clear();
+            colors.Clear();
+            bars.Clear();
         }
 
         private void labelSkinEffect_Click(object sender, EventArgs e)
@@ -503,6 +544,24 @@ namespace Tesla_Coil_Calculator
             label3.Text = "μ";
             label4.Text = "F";
             label5.Text = "δ";
+
+            //Tooltip
+            toolTip1.Active = false;
+            toolTip2.Active = false;
+            toolTip3.Active = false;
+            toolTip4.Active = true;
+
+            //pictureBox
+            pictureBoxImage.Image = null;
+
+            //Lists
+            Array.Clear(pointFs);
+            Graphcalc4.Clear();
+            Graphcalc3.Clear();
+            vector4s.Clear();
+            Convertedvector4s.Clear();
+            colors.Clear();
+            bars.Clear();
         }
 
         private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
@@ -989,6 +1048,15 @@ namespace Tesla_Coil_Calculator
                         break;
                     case "4":
                         GraphCalc calc4 = new GraphCalc(0, 0, 0, 0, 0);
+
+                        Bitmap btm4 = new Bitmap(pictureBoxImage.Width, pictureBoxImage.Height);
+                        Graphics g4 = Graphics.FromImage(btm4);
+
+                        int Width = pictureBoxImage.Width;
+                        int Height = pictureBoxImage.Height;
+
+                        g4.FillRectangle(Brushes.White, 0, 0, Width, Height);
+
                         try
                         {
                             d1 = Convert.ToDouble(textBox1.Text);
@@ -1014,12 +1082,12 @@ namespace Tesla_Coil_Calculator
                             calc4.Skin_Depth(d2, d4, d3);
                             if (d1 > calc4.Depth)
                             {
-                                if(comboBox5.SelectedIndex == 0)
+                                if (comboBox5.SelectedIndex == 0)
                                     textBox5.Text = (calc4.Depth * Math.Pow(10, 3)).ToString("0.0#####E+0");
                                 if (comboBox5.SelectedIndex == 1)
                                     textBox5.Text = (calc4.Depth * Math.Pow(10, 3) / 25.4).ToString("0.0#####E+0");
                             }
-                                
+
                             else
                             {
                                 if (comboBox5.SelectedIndex == comboBox1.SelectedIndex)
@@ -1035,6 +1103,7 @@ namespace Tesla_Coil_Calculator
                         }
                         catch
                         {
+                            pictureBoxImage.Image = btm4;
                         }
 
                         double usableConductor = 0;
@@ -1043,12 +1112,6 @@ namespace Tesla_Coil_Calculator
                         else
                             usableConductor = Math.PI * Math.Pow(d1 / 2, 2);
                         double Percent = usableConductor / (Math.PI * Math.Pow(d1 / 2, 2)) * 100;
-
-                        Bitmap btm4 = new Bitmap(pictureBoxImage.Width, pictureBoxImage.Height);
-                        Graphics g4 = Graphics.FromImage(btm4);
-
-                        int Width = pictureBoxImage.Width;
-                        int Height = pictureBoxImage.Height;
 
                         PointF pointTopMiddle = new PointF((Width / 2 - 50), (Height / 2 - colors.Max(v => v.W)));
                         PointF pointTopRight = new PointF((Width / 2 - 50) + colors.Max(v => v.W) + 20, (Height / 2 - colors.Max(v => v.W)));
@@ -1061,9 +1124,6 @@ namespace Tesla_Coil_Calculator
 
                         PointF pointBottomMiddleDepth = new PointF((Width / 2 - 50), (Height / 2 + colors.Max(v => v.W)) - DepthInPixels);
                         PointF pointBottomRightDepth = new PointF((Width / 2 - 50) + colors.Max(v => v.W) + 10, (Height / 2 + colors.Max(v => v.W)) - DepthInPixels);
-                        //- Graphcalc3.Max(v => v.X)
-
-                        g4.FillRectangle(Brushes.White, 0, 0, Width, Height);
 
                         foreach (Vector4 calc in colors)
                         {
@@ -1106,8 +1166,8 @@ namespace Tesla_Coil_Calculator
                                 LinearGradientBrush linGrBrush = new LinearGradientBrush(
            new Point(0, 10),
            new Point(200, 10),
-           Color.FromArgb((int)Convertedvector4s[i].X, (int)Convertedvector4s[i].Y, (int)Convertedvector4s[i].Z),   // Opaque red
-           Color.FromArgb((int)Convertedvector4s[i + 1].X, (int)Convertedvector4s[i + 1].Y, (int)Convertedvector4s[i + 1].Z));  // Opaque blue
+           Color.FromArgb((int)Convertedvector4s[i].X, (int)Convertedvector4s[i].Y, (int)Convertedvector4s[i].Z),
+           Color.FromArgb((int)Convertedvector4s[i + 1].X, (int)Convertedvector4s[i + 1].Y, (int)Convertedvector4s[i + 1].Z));
 
                                 g4.FillRectangle(linGrBrush, (float)(pictureBoxImage.Width - 40), Convertedvector4s[i].W + 20, 10f, Convertedvector4s[i + 1].W - Convertedvector4s[i].W);
                             }
@@ -1155,13 +1215,10 @@ namespace Tesla_Coil_Calculator
                         break;
                     }
 
-                    //Array.Clear(Graphcalc3, 0, Graphcalc3.Length);
-                    //Array.Clear(Graphcalc4, 0, Graphcalc4.Length);
                     Array.Clear(pointFs, 0, pointFs.Length);
                     colors.Clear();
                     Graphcalc3.Clear();
                     Graphcalc4.Clear();
-                    //Array.Clear(colors, 0, colors.Length);
                     vector4s.Clear();
                     Convertedvector4s.Clear();
                     int i1 = 0;
@@ -1211,13 +1268,10 @@ namespace Tesla_Coil_Calculator
                         break;
                     }
 
-                    //Array.Clear(Graphcalc3, 0, Graphcalc3.Length);
-                    //Array.Clear(Graphcalc4, 0, Graphcalc4.Length);
                     Array.Clear(pointFs, 0, pointFs.Length);
                     colors.Clear();
                     Graphcalc3.Clear();
                     Graphcalc4.Clear();
-                    //Array.Clear(colors, 0, colors.Length);
                     vector4s.Clear();
                     Convertedvector4s.Clear();
                     int i2 = 0;
@@ -1280,13 +1334,10 @@ namespace Tesla_Coil_Calculator
                         break;
                     }
 
-                    //Array.Clear(Graphcalc3, 0, Graphcalc3.Length);
-                    //Array.Clear(Graphcalc4, 0, Graphcalc4.Length);
                     Array.Clear(pointFs, 0, pointFs.Length);
                     colors.Clear();
                     Graphcalc3.Clear();
                     Graphcalc4.Clear();
-                    //Array.Clear(colors, 0, colors.Length);
                     vector4s.Clear();
                     Convertedvector4s.Clear();
                     int i3 = 0;
@@ -1353,13 +1404,10 @@ namespace Tesla_Coil_Calculator
                         break;
                     }
 
-                    //Array.Clear(Graphcalc3, 0, Graphcalc3.Length);
-                    //Array.Clear(Graphcalc4, 0, Graphcalc4.Length);
                     Array.Clear(pointFs, 0, pointFs.Length);
                     colors.Clear();
                     Graphcalc3.Clear();
                     Graphcalc4.Clear();
-                    //Array.Clear(colors, 0, colors.Length);
                     vector4s.Clear();
                     Convertedvector4s.Clear();
                     double r = d1 / 2;
@@ -1396,6 +1444,7 @@ namespace Tesla_Coil_Calculator
                             int gBlue = Color.Green.G;
                             int bRed = Color.Red.B;
                             int bBlue = Color.Green.B;
+
                             // Calculate the weighted average of each component
                             int rAverage = (int)Math.Round((1 - value) * rRed + value * rBlue);
                             int gAverage = (int)Math.Round((1 - value) * gRed + value * gBlue);
@@ -1418,6 +1467,7 @@ namespace Tesla_Coil_Calculator
                             int gBlue = Color.Blue.G;
                             int bRed = Color.Green.B;
                             int bBlue = Color.Blue.B;
+
                             // Calculate the weighted average of each component
                             int rAverage = (int)Math.Round((1 - value) * rRed + value * rBlue);
                             int gAverage = (int)Math.Round((1 - value) * gRed + value * gBlue);
@@ -1428,23 +1478,6 @@ namespace Tesla_Coil_Calculator
                         }
                         if (Graphcalc3[i].Z > d2 * 50)
                         {
-                            //double zMin = d2 * 50;
-                            //double zMax = Graphcalc3.Max(v => v.Z);
-
-                            //double zvalue = Graphcalc3[i].Z;
-                            //double value = (zvalue - zMin) / (zMax - zMin);
-
-                            //int rRed = Color.Blue.R;
-                            //int rBlue = Color.DarkBlue.R;
-                            //int gRed = Color.Blue.G;
-                            //int gBlue = Color.DarkBlue.G;
-                            //int bRed = Color.Blue.B;
-                            //int bBlue = Color.DarkBlue.B;
-                            //// Calculate the weighted average of each component
-                            //int rAverage = (int)Math.Round((1 - value) * rRed + value * rBlue);
-                            //int gAverage = (int)Math.Round((1 - value) * gRed + value * gBlue);
-                            //int bAverage = (int)Math.Round((1 - value) * bRed + value * bBlue);
-
                             int rAverage = 0;
                             int gAverage = 0;
                             int bAverage = 255;
@@ -1466,8 +1499,8 @@ namespace Tesla_Coil_Calculator
                         minZ = colors.Where(c => c.X == 255).Min(c => c.W);
                         maxZ = colors.Where(c => c.X == 255).Max(c => c.W);
 
-                        minZ2 = colors.Where(c => c.Y == 128).Min(c => c.W); //This is what's causing trouble
-                        maxZ2 = colors.Where(c => c.Y == 128).Max(c => c.W); //This is what's causing trouble
+                        minZ2 = colors.Where(c => c.Y == 128).Min(c => c.W);
+                        maxZ2 = colors.Where(c => c.Y == 128).Max(c => c.W);
 
                         minZ3 = colors.Where(c => c.Z == 255).Min(c => c.W);
                         maxZ3 = colors.Where(c => c.Z == 255).Max(c => c.W);
@@ -1534,6 +1567,14 @@ namespace Tesla_Coil_Calculator
             ccp = settings.CCP;
 
             pointFs = new PointF[ccp * (pictureBoxImage.Width - 4) + 1];
+
+            Array.Clear(pointFs);
+            Graphcalc3.Clear();
+            Graphcalc4.Clear();
+            vector4s.Clear();
+            Convertedvector4s.Clear();
+            colors.Clear();
+            bars.Clear();
         }
 
         private void comboBox1_KeyPress(object sender, KeyPressEventArgs e)
