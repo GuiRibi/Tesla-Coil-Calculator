@@ -10,13 +10,3 @@ Select an option from the tab on the left.>> Click on the Radiobutton with the v
 
 # Download & installation
 Download and extract [this Zip file](https://github.com/GuiRibi/Tesla-Coil-Calculator/blob/master/Tesla%20Coil%20Calculator_win64_1.2.0.zip) and run ***Tesla Coil Calculator.exe***
-
-# Change Log
-* Added **Constant current capacitor charging/discharging** calclulator;
-* Added **Resistive discharging** calclulator;
-* Added **Skin effect** calclulator;
-* Added **Graphical Calculator** support.
-* Added option for user intput (Now with more units available).
-* Added option for variable resolution (on the Gear icon on the top left corner of the graphical calculator form).
-* Added option for variable font size (on the Gear icon on the top left corner of the graphical calculator form).
-* Added Shadows to the application for better visualisation and distinction between forms.
